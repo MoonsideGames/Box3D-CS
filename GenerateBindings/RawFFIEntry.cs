@@ -7,6 +7,9 @@ internal class RawFFIEntry
     [JsonPropertyName("tag")]
     public string Tag { get; }
 
+    [JsonPropertyName("id")]
+    public uint? ID { get; }
+
     [JsonPropertyName("name")]
     public string? Name { get; }
 
@@ -40,6 +43,7 @@ internal class RawFFIEntry
     [JsonConstructor]
     public RawFFIEntry(
         string tag,
+        uint? id,
         string? name,
         string? header,
         RawFFIEntry? type,
@@ -53,6 +57,7 @@ internal class RawFFIEntry
     )
     {
         Tag = tag.Replace(":", "");
+        ID = id;
         Name = name;
         Header = header;
         Type = type;

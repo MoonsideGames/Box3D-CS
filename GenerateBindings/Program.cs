@@ -168,8 +168,25 @@ internal static partial class Program
 
             if (entry.Tag == "enum")
             {
-                definitions.Append($"public enum {entry.Name!}\n{{\n");
-                DefinedTypes.Add(entry.Name!);
+                string name = entry.Name!;
+
+                // if the enum is anonymously typedef'd, we have to search for the typedef name
+                // TODO: we can optimize this by doing a pre-pass to cache IDs
+                if (name == "")
+                {
+                    var id = entry.ID;
+                    foreach (var otherEntry in ffiData)
+                    {
+                        if (otherEntry.Type?.ID == id)
+                        {
+                            name = otherEntry.Name!;
+                            break;
+                        }
+                    }
+                }
+
+                definitions.Append($"public enum {name}\n{{\n");
+                DefinedTypes.Add(name);
 
                 foreach (var enumValue in entry.Fields!)
                 {
@@ -432,13 +449,16 @@ internal static partial class Program
                     {
                         var foundTypedef = GetTypeFromTypedefMap(componentType);
                         typeName = CSharpTypeFromFFI(foundTypedef, TypeContext.FunctionData);
-                        if (componentType.Tag == "function-pointer")
+                        if (typeName == "FUNCTION_POINTER")
                         {
-                            typeName = "IntPtr";
-                        }
-                        else
-                        {
-                            typeName = $"{componentType.Tag}";
+                            if (componentType.Tag == "function-pointer")
+                            {
+                                typeName = "IntPtr";
+                            }
+                            else
+                            {
+                                typeName = $"{componentType.Tag}";
+                            }
                         }
                     }
 
@@ -785,29 +805,29 @@ public static unsafe partial class Interop
 
     // Taken from https://github.com/ppy/SDL3-CS
     // C# bools are not blittable, so we need this workaround
-    public readonly record struct _Bool
+    public readonly record struct box3dbool
     {
         private readonly byte value;
 
         internal const byte FALSE_VALUE = 0;
         internal const byte TRUE_VALUE = 1;
 
-        internal _Bool(byte value)
+        internal box3dbool(byte value)
         {
             this.value = value;
         }
 
-        public static implicit operator bool(_Bool b)
+        public static implicit operator bool(box3dbool b)
         {
             return b.value != FALSE_VALUE;
         }
 
-        public static implicit operator _Bool(bool b)
+        public static implicit operator box3dbool(bool b)
         {
-            return new _Bool(b ? TRUE_VALUE : FALSE_VALUE);
+            return new box3dbool(b ? TRUE_VALUE : FALSE_VALUE);
         }
 
-        public bool Equals(_Bool other)
+        public bool Equals(box3dbool other)
         {
             return other.value == value;
         }
@@ -878,29 +898,29 @@ public static unsafe class box
 
     // Taken from https://github.com/ppy/SDL3-CS
     // C# bools are not blittable, so we need this workaround
-    public struct _Bool
+    public struct box3dbool
     {
         private readonly byte value;
 
         internal const byte FALSE_VALUE = 0;
         internal const byte TRUE_VALUE = 1;
 
-        internal _Bool(byte value)
+        internal box3dbool(byte value)
         {
             this.value = value;
         }
 
-        public static implicit operator bool(_Bool b)
+        public static implicit operator bool(box3dbool b)
         {
             return b.value != FALSE_VALUE;
         }
 
-        public static implicit operator _Bool(bool b)
+        public static implicit operator box3dbool(bool b)
         {
-            return new _Bool(b ? TRUE_VALUE : FALSE_VALUE);
+            return new box3dbool(b ? TRUE_VALUE : FALSE_VALUE);
         }
 
-        public bool Equals(_Bool other)
+        public bool Equals(box3dbool other)
         {
             return other.value == value;
         }
@@ -909,11 +929,11 @@ public static unsafe class box
         {
             if (rhs is bool)
             {
-                return Equals((_Bool)(bool)rhs);
+                return Equals((box3dbool)(bool)rhs);
             }
-            else if (rhs is _Bool)
+            else if (rhs is box3dbool)
             {
-                return Equals((_Bool)rhs);
+                return Equals((box3dbool)rhs);
             }
             else
             {
@@ -985,6 +1005,7 @@ public static unsafe class box
         return type.Tag switch
         {
             "_Bool"            => "box3dbool",
+            "uint8_t"          => "byte",
             "Sint8"            => "sbyte",
             "Sint16"           => "short",
             "int"              => "int",
@@ -993,11 +1014,11 @@ public static unsafe class box
             "Sint64"           => "long",
             "Uint8"            => "byte",
             "unsigned-short"   => "ushort",
-            "Uint16"           => "ushort",
+            "uint16_t"         => "ushort",
             "unsigned-int"     => "uint",
-            "Uint32"           => "uint",
+            "uint32_t"         => "uint",
             "unsigned-long"    => "ulong",
-            "Uint64"           => "ulong",
+            "uint64_t"         => "ulong",
             "float"            => "float",
             "double"           => "double",
             "size_t"           => "UIntPtr",

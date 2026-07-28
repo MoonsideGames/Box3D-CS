@@ -282,8 +282,33 @@ internal static class UserProvidedData
 
     internal static readonly Dictionary<string, string[]> FlagEnumDefinitions = new()
     {
-        { "b3TreeNodeFlags", [ ] }, // ../box3d/include/box3d/types.h:1681:3
-        { "b3MeshEdgeFlags", [ ] }, // ../box3d/include/box3d/types.h:2121:3
+        { 
+            "b3TreeNodeFlags", [
+                "b3_allocatedNode = 0x0001",
+                "b3_enlargedNode = 0x0002",
+                "b3_leafNode = 0x0004",
+            ] 
+        }, // ../box3d/include/box3d/types.h:1681:3
+        { 
+            "b3MeshEdgeFlags", [
+                "b3_concaveEdge1 = 0x01",
+                "b3_concaveEdge2 = 0x02",
+                "b3_concaveEdge3 = 0x04",
+
+                "b3_inverseConcaveEdge1 = 0x10",
+                "b3_inverseConcaveEdge2 = 0x20",
+                "b3_inverseConcaveEdge3 = 0x40",
+
+
+	            "b3_allConcaveEdges = b3_concaveEdge1 | b3_concaveEdge2 | b3_concaveEdge3",
+
+	            "b3_flatEdge1 = b3_concaveEdge1 | b3_inverseConcaveEdge1",
+	            "b3_flatEdge2 = b3_concaveEdge2 | b3_inverseConcaveEdge2",
+	            "b3_flatEdge3 = b3_concaveEdge3 | b3_inverseConcaveEdge3",
+
+	            "b3_allFlatEdges = b3_flatEdge1 | b3_flatEdge2 | b3_flatEdge3",
+            ] 
+        }, // ../box3d/include/box3d/types.h:2121:3
     };
 
     internal static readonly HashSet<string> FlagTypes =

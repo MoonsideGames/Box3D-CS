@@ -23,29 +23,29 @@ public static unsafe partial class Interop
 
     // Taken from https://github.com/ppy/SDL3-CS
     // C# bools are not blittable, so we need this workaround
-    public readonly record struct _Bool
+    public readonly record struct box3dbool
     {
         private readonly byte value;
 
         internal const byte FALSE_VALUE = 0;
         internal const byte TRUE_VALUE = 1;
 
-        internal _Bool(byte value)
+        internal box3dbool(byte value)
         {
             this.value = value;
         }
 
-        public static implicit operator bool(_Bool b)
+        public static implicit operator bool(box3dbool b)
         {
             return b.value != FALSE_VALUE;
         }
 
-        public static implicit operator _Bool(bool b)
+        public static implicit operator box3dbool(bool b)
         {
-            return new _Bool(b ? TRUE_VALUE : FALSE_VALUE);
+            return new box3dbool(b ? TRUE_VALUE : FALSE_VALUE);
         }
 
-        public bool Equals(_Bool other)
+        public bool Equals(box3dbool other)
         {
             return other.value == value;
         }
@@ -94,19 +94,19 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsDoublePrecision();
+    public static partial box3dbool b3IsDoublePrecision();
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial uint64_t b3GetTicks();
+    public static partial ulong b3GetTicks();
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial float b3GetMilliseconds(uint64_t ticks);
+    public static partial float b3GetMilliseconds(ulong ticks);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial float b3GetMillisecondsAndReset(IntPtr ticks); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial float b3GetMillisecondsAndReset(ref ulong ticks);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -118,7 +118,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial uint32_t b3Hash(uint32_t hash, IntPtr data, int count); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial uint b3Hash(uint hash, Span<byte> data, int count);
 
     // ../box3d/include/box3d/math_functions.h
 
@@ -274,7 +274,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Vec3 b3GetLengthAndNormalize(IntPtr length, b3Vec3 a); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3Vec3 b3GetLengthAndNormalize(out float length, b3Vec3 a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -282,7 +282,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsNormalized(b3Vec3 a);
+    public static partial box3dbool b3IsNormalized(b3Vec3 a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -334,7 +334,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsNormalizedQuat(b3Quat q);
+    public static partial box3dbool b3IsNormalizedQuat(b3Quat q);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -374,7 +374,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Vec3 b3GetAxisAngle(IntPtr radians, b3Quat q); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3Vec3 b3GetAxisAngle(out float radians, b3Quat q);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -382,7 +382,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Quat b3MakeQuatFromMatrix(IntPtr m); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3Quat b3MakeQuatFromMatrix(in b3Matrix3 m);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -534,11 +534,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3AABB b3MakeAABB(IntPtr points, int count, float radius); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3AABB b3MakeAABB(Span<b3Vec3> points, int count, float radius);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3AABB_Contains(b3AABB a, b3AABB b);
+    public static partial box3dbool b3AABB_Contains(b3AABB a, b3AABB b);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -562,7 +562,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3AABB_Overlaps(b3AABB a, b3AABB b);
+    public static partial box3dbool b3AABB_Overlaps(b3AABB a, b3AABB b);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -595,47 +595,47 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsValidFloat(float a);
+    public static partial box3dbool b3IsValidFloat(float a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsValidVec3(b3Vec3 a);
+    public static partial box3dbool b3IsValidVec3(b3Vec3 a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsValidQuat(b3Quat q);
+    public static partial box3dbool b3IsValidQuat(b3Quat q);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsValidTransform(b3Transform a);
+    public static partial box3dbool b3IsValidTransform(b3Transform a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsValidMatrix3(b3Matrix3 a);
+    public static partial box3dbool b3IsValidMatrix3(b3Matrix3 a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsValidAABB(b3AABB a);
+    public static partial box3dbool b3IsValidAABB(b3AABB a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsBoundedAABB(b3AABB a);
+    public static partial box3dbool b3IsBoundedAABB(b3AABB a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsSaneAABB(b3AABB a);
+    public static partial box3dbool b3IsSaneAABB(b3AABB a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsValidPlane(b3Plane a);
+    public static partial box3dbool b3IsValidPlane(b3Plane a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsValidPosition(b3Pos p);
+    public static partial box3dbool b3IsValidPosition(b3Pos p);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsValidWorldTransform(b3WorldTransform t);
+    public static partial box3dbool b3IsValidWorldTransform(b3WorldTransform t);
 
     // ../box3d/include/box3d/constants.h
 
@@ -660,82 +660,82 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3WorldId
     {
-        public uint16_t index1;
-        public uint16_t generation;
+        public ushort index1;
+        public ushort generation;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct b3BodyId
     {
         public int32_t index1;
-        public uint16_t world0;
-        public uint16_t generation;
+        public ushort world0;
+        public ushort generation;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct b3ShapeId
     {
         public int32_t index1;
-        public uint16_t world0;
-        public uint16_t generation;
+        public ushort world0;
+        public ushort generation;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct b3JointId
     {
         public int32_t index1;
-        public uint16_t world0;
-        public uint16_t generation;
+        public ushort world0;
+        public ushort generation;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct b3ContactId
     {
         public int32_t index1;
-        public uint16_t world0;
+        public ushort world0;
         public int16_t padding;
-        public uint32_t generation;
+        public uint generation;
     }
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial uint32_t b3StoreWorldId(b3WorldId id);
+    public static partial uint b3StoreWorldId(b3WorldId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3WorldId b3LoadWorldId(uint32_t x);
+    public static partial b3WorldId b3LoadWorldId(uint x);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial uint64_t b3StoreBodyId(b3BodyId id);
+    public static partial ulong b3StoreBodyId(b3BodyId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3BodyId b3LoadBodyId(uint64_t x);
+    public static partial b3BodyId b3LoadBodyId(ulong x);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial uint64_t b3StoreShapeId(b3ShapeId id);
+    public static partial ulong b3StoreShapeId(b3ShapeId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3ShapeId b3LoadShapeId(uint64_t x);
+    public static partial b3ShapeId b3LoadShapeId(ulong x);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial uint64_t b3StoreJointId(b3JointId id);
+    public static partial ulong b3StoreJointId(b3JointId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3JointId b3LoadJointId(uint64_t x);
+    public static partial b3JointId b3LoadJointId(ulong x);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3StoreContactId(b3ContactId id, array values);
+    public static partial void b3StoreContactId(b3ContactId id, INLINE_ARRAY values);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3ContactId b3LoadContactId(array values);
+    public static partial b3ContactId b3LoadContactId(INLINE_ARRAY values);
 
     // ../box3d/include/box3d/types.h
 
@@ -763,7 +763,7 @@ public static unsafe partial class Interop
         public IntPtr restitutionCallback; // WARN_ANONYMOUS_FUNCTION_POINTER
         public box3dbool enableSleep;
         public box3dbool enableContinuous;
-        public uint32_t workerCount;
+        public uint workerCount;
         public IntPtr enqueueTask; // WARN_ANONYMOUS_FUNCTION_POINTER
         public IntPtr finishTask; // WARN_ANONYMOUS_FUNCTION_POINTER
         public IntPtr userTaskContext;
@@ -829,8 +829,8 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3Filter
     {
-        public uint64_t categoryBits;
-        public uint64_t maskBits;
+        public ulong categoryBits;
+        public ulong maskBits;
         public int groupIndex;
     }
 
@@ -845,9 +845,9 @@ public static unsafe partial class Interop
         public float restitution;
         public float rollingResistance;
         public b3Vec3 tangentVelocity;
-        public uint64_t userMaterialId;
-        public uint32_t customColor;
-        public uint32_t padding;
+        public ulong userMaterialId;
+        public uint customColor;
+        public uint padding;
     }
 
     [LibraryImport(nativeLibName)]
@@ -1146,7 +1146,7 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3ExplosionDef
     {
-        public uint64_t maskBits;
+        public ulong maskBits;
         public b3Pos position;
         public float radius;
         public float falloff;
@@ -1205,8 +1205,8 @@ public static unsafe partial class Interop
         public b3Pos point;
         public b3Vec3 normal;
         public float approachSpeed;
-        public uint64_t userMaterialIdA;
-        public uint64_t userMaterialIdB;
+        public ulong userMaterialIdA;
+        public ulong userMaterialIdB;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1263,9 +1263,9 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3QueryFilter
     {
-        public uint64_t categoryBits;
-        public uint64_t maskBits;
-        public uint64_t id;
+        public ulong categoryBits;
+        public ulong maskBits;
+        public ulong id;
         public byte* name;
     }
 
@@ -1287,7 +1287,7 @@ public static unsafe partial class Interop
         public b3ShapeId shapeId;
         public b3Pos point;
         public b3Vec3 normal;
-        public uint64_t userMaterialId;
+        public ulong userMaterialId;
         public float fraction;
         public int triangleIndex;
         public int childIndex;
@@ -1342,7 +1342,7 @@ public static unsafe partial class Interop
         public b3Vec3 normal;
         public float fraction;
         public int triangleIndex;
-        public uint64_t userMaterialId;
+        public ulong userMaterialId;
         public int iterations;
         public box3dbool hit;
     }
@@ -1351,9 +1351,9 @@ public static unsafe partial class Interop
     public struct b3SimplexCache
     {
         public float metric;
-        public uint16_t count;
-        public fixed uint8_t indexA[4];
-        public fixed uint8_t indexB[4];
+        public ushort count;
+        public fixed byte indexA[4];
+        public fixed byte indexB[4];
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1461,7 +1461,9 @@ public static unsafe partial class Interop
     [Flags]
     public enum b3TreeNodeFlags : b3TreeNodeFlags
     {
-        // WARN_UNPOPULATED_FLAG_ENUM
+        b3_allocatedNode = 0x0001,
+        b3_enlargedNode = 0x0002,
+        b3_leafNode = 0x0004,
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1477,25 +1479,25 @@ public static unsafe partial class Interop
         [FieldOffset(0)]
         public b3AABB aabb;
         [FieldOffset(24)]
-        public uint64_t categoryBits;
+        public ulong categoryBits;
         [FieldOffset(32)]
         public b3TreeNodeChildren __children;
         [FieldOffset(32)]
-        public uint64_t __userData;
+        public ulong __userData;
         [FieldOffset(40)]
         public int __parent;
         [FieldOffset(40)]
         public int __next;
         [FieldOffset(44)]
-        public uint16_t height;
+        public ushort height;
         [FieldOffset(46)]
-        public uint16_t flags;
+        public ushort flags;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct b3DynamicTree
     {
-        public uint64_t version;
+        public ulong version;
         public b3TreeNode* nodes;
         public int root;
         public int nodeCount;
@@ -1572,30 +1574,30 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3HullVertex
     {
-        public uint8_t edge;
+        public byte edge;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct b3HullHalfEdge
     {
-        public uint8_t next;
-        public uint8_t twin;
-        public uint8_t origin;
-        public uint8_t face;
+        public byte next;
+        public byte twin;
+        public byte origin;
+        public byte face;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct b3HullFace
     {
-        public uint8_t edge;
+        public byte edge;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct b3HullData
     {
-        public uint64_t version;
+        public ulong version;
         public int byteCount;
-        public uint32_t hash;
+        public uint hash;
         public b3AABB aabb;
         public float surfaceArea;
         public float volume;
@@ -1671,7 +1673,7 @@ public static unsafe partial class Interop
         public b3HullFace boxFaces3;
         public b3HullFace boxFaces4;
         public b3HullFace boxFaces5;
-        public fixed uint8_t padding[10];
+        public fixed byte padding[10];
         public fixed float vx[8];
         public fixed float vy[8];
         public fixed float vz[8];
@@ -1685,7 +1687,7 @@ public static unsafe partial class Interop
     {
         public b3Vec3* vertices;
         public int32_t* indices;
-        public uint8_t* materialIndices;
+        public byte* materialIndices;
         public float weldTolerance;
         public int vertexCount;
         public int triangleCount;
@@ -1712,7 +1714,17 @@ public static unsafe partial class Interop
     [Flags]
     public enum b3MeshEdgeFlags : b3MeshEdgeFlags
     {
-        // WARN_UNPOPULATED_FLAG_ENUM
+        b3_concaveEdge1 = 0x01,
+        b3_concaveEdge2 = 0x02,
+        b3_concaveEdge3 = 0x04,
+        b3_inverseConcaveEdge1 = 0x10,
+        b3_inverseConcaveEdge2 = 0x20,
+        b3_inverseConcaveEdge3 = 0x40,
+        b3_allConcaveEdges = b3_concaveEdge1 | b3_concaveEdge2 | b3_concaveEdge3,
+        b3_flatEdge1 = b3_concaveEdge1 | b3_inverseConcaveEdge1,
+        b3_flatEdge2 = b3_concaveEdge2 | b3_inverseConcaveEdge2,
+        b3_flatEdge3 = b3_concaveEdge3 | b3_inverseConcaveEdge3,
+        b3_allFlatEdges = b3_flatEdge1 | b3_flatEdge2 | b3_flatEdge3,
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1735,7 +1747,7 @@ public static unsafe partial class Interop
         [FieldOffset(16)]
         public b3Vec3 upperBound;
         [FieldOffset(28)]
-        public uint32_t triangleOffset;
+        public uint triangleOffset;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1755,9 +1767,9 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3MeshData
     {
-        public uint64_t version;
+        public ulong version;
         public int byteCount;
-        public uint32_t hash;
+        public uint hash;
         public b3AABB bounds;
         public float surfaceArea;
         public int treeHeight;
@@ -1784,7 +1796,7 @@ public static unsafe partial class Interop
     public struct b3HeightFieldDef
     {
         public float* heights;
-        public uint8_t* materialIndices;
+        public byte* materialIndices;
         public b3Vec3 scale;
         public int countX;
         public int countZ;
@@ -1796,9 +1808,9 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3HeightFieldData
     {
-        public uint64_t version;
+        public ulong version;
         public int byteCount;
-        public uint32_t hash;
+        public uint hash;
         public b3AABB aabb;
         public float minHeight;
         public float maxHeight;
@@ -1810,7 +1822,7 @@ public static unsafe partial class Interop
         public int materialOffset;
         public int flagsOffset;
         public box3dbool clockwise;
-        public fixed uint8_t padding[3];
+        public fixed byte padding[3];
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1861,7 +1873,7 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3CompoundData
     {
-        public uint64_t version;
+        public ulong version;
         public int byteCount;
         public int nodeOffset;
         public b3DynamicTree tree;
@@ -1939,7 +1951,7 @@ public static unsafe partial class Interop
         public float normalImpulse;
         public float totalNormalImpulse;
         public float normalVelocity;
-        public uint32_t featureId;
+        public uint featureId;
         public int triangleIndex;
         public box3dbool persisted;
     }
@@ -1958,7 +1970,7 @@ public static unsafe partial class Interop
         public int pointCount;
     }
 
-    public enum
+    public enum b3SeparatingFeature
     {
         b3_invalidAxis = 0,
         b3_backsideAxis = 1,
@@ -1971,7 +1983,7 @@ public static unsafe partial class Interop
         b3_manualEdgePairAxis = 8,
     }
 
-    public enum
+    public enum b3TriangleFeature
     {
         b3_featureNone = 0,
         b3_featureTriangleFace = 1,
@@ -1987,10 +1999,10 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3FeaturePair
     {
-        public uint8_t owner1;
-        public uint8_t index1;
-        public uint8_t owner2;
-        public uint8_t index2;
+        public byte owner1;
+        public byte index1;
+        public byte owner2;
+        public byte index2;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -2179,7 +2191,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial uint32_t b3MakeDebugColor(b3HexColor rgb, b3DebugMaterial material);
+    public static partial uint b3MakeDebugColor(b3HexColor rgb, b3DebugMaterial material);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2254,7 +2266,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3DynamicTree_CreateProxy(IntPtr tree, b3AABB aabb, uint64_t categoryBits, uint64_t userData); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial int b3DynamicTree_CreateProxy(IntPtr tree, b3AABB aabb, ulong categoryBits, ulong userData); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2270,27 +2282,27 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DynamicTree_SetCategoryBits(IntPtr tree, int proxyId, uint64_t categoryBits); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3DynamicTree_SetCategoryBits(IntPtr tree, int proxyId, ulong categoryBits); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial uint64_t b3DynamicTree_GetCategoryBits(IntPtr tree, int proxyId); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial ulong b3DynamicTree_GetCategoryBits(IntPtr tree, int proxyId); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3DynamicTree_Query(IntPtr tree, b3AABB aabb, uint64_t maskBits, _Bool requireAllBits, IntPtr callback, pointer context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3DynamicTree_Query(IntPtr tree, b3AABB aabb, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3DynamicTree_QueryClosest(IntPtr tree, b3Vec3 point, uint64_t maskBits, _Bool requireAllBits, IntPtr callback, pointer context, IntPtr minDistanceSqr); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3DynamicTree_QueryClosest(IntPtr tree, b3Vec3 point, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context, IntPtr minDistanceSqr); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3DynamicTree_RayCast(IntPtr tree, IntPtr input, uint64_t maskBits, _Bool requireAllBits, IntPtr callback, pointer context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3DynamicTree_RayCast(IntPtr tree, IntPtr input, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3DynamicTree_BoxCast(IntPtr tree, IntPtr input, uint64_t maskBits, _Bool requireAllBits, IntPtr callback, pointer context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3DynamicTree_BoxCast(IntPtr tree, IntPtr input, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2310,7 +2322,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3DynamicTree_Rebuild(IntPtr tree, _Bool fullBuild); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial int b3DynamicTree_Rebuild(IntPtr tree, box3dbool fullBuild); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2334,7 +2346,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial uint64_t b3DynamicTree_GetUserData(IntPtr tree, int proxyId); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial ulong b3DynamicTree_GetUserData(IntPtr tree, int proxyId); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2442,7 +2454,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CreateGridMesh(int xCount, int zCount, float cellWidth, int materialCount, _Bool identifyEdges); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial IntPtr b3CreateGridMesh(int xCount, int zCount, float cellWidth, int materialCount, box3dbool identifyEdges); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2454,7 +2466,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CreateBoxMesh(b3Vec3 center, b3Vec3 extent, _Bool identifyEdges); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial IntPtr b3CreateBoxMesh(b3Vec3 center, b3Vec3 extent, box3dbool identifyEdges); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2494,11 +2506,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CreateGrid(int rowCount, int columnCount, b3Vec3 scale, _Bool makeHoles); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial IntPtr b3CreateGrid(int rowCount, int columnCount, b3Vec3 scale, box3dbool makeHoles); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CreateWave(int rowCount, int columnCount, b3Vec3 scale, float rowFrequency, float columnFrequency, _Bool makeHoles); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial IntPtr b3CreateWave(int rowCount, int columnCount, b3Vec3 scale, float rowFrequency, float columnFrequency, box3dbool makeHoles); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2518,7 +2530,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3QueryCompound(IntPtr compound, b3AABB aabb, IntPtr fcn, pointer context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3QueryCompound(IntPtr compound, b3AABB aabb, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2594,31 +2606,31 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3IsValidRay(IntPtr input); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial box3dbool b3IsValidRay(IntPtr input); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3OverlapCapsule(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial box3dbool b3OverlapCapsule(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3OverlapCompound(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial box3dbool b3OverlapCompound(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3OverlapHeightField(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial box3dbool b3OverlapHeightField(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3OverlapHull(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial box3dbool b3OverlapHull(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3OverlapMesh(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial box3dbool b3OverlapMesh(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3OverlapSphere(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial box3dbool b3OverlapSphere(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2674,11 +2686,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3QueryMesh(IntPtr mesh, b3AABB bounds, IntPtr fcn, pointer context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3QueryMesh(IntPtr mesh, b3AABB bounds, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3QueryHeightField(IntPtr heightField, b3AABB bounds, IntPtr fcn, pointer context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3QueryHeightField(IntPtr heightField, b3AABB bounds, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2718,7 +2730,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3CollideHulls(IntPtr manifold, int capacity, IntPtr hullA, IntPtr hullB, b3Transform transformBtoA, pointer cache); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3CollideHulls(IntPtr manifold, int capacity, IntPtr hullA, IntPtr hullB, b3Transform transformBtoA, IntPtr cache); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2726,7 +2738,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3CollideTriangleAndHull(IntPtr manifold, int capacity, b3Vec3 v1, b3Vec3 v2, b3Vec3 v3, int triangleFlags, IntPtr hullB, pointer cache, _Bool enableSpeculative); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3CollideTriangleAndHull(IntPtr manifold, int capacity, b3Vec3 v1, b3Vec3 v2, b3Vec3 v3, int triangleFlags, IntPtr hullB, IntPtr cache, box3dbool enableSpeculative); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2760,7 +2772,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3World_IsValid(b3WorldId id);
+    public static partial box3dbool b3World_IsValid(b3WorldId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2768,7 +2780,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_Draw(b3WorldId worldId, IntPtr draw, uint64_t maskBits); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3World_Draw(b3WorldId worldId, IntPtr draw, ulong maskBits); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2792,15 +2804,15 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3World_OverlapAABB(b3WorldId worldId, b3AABB aabb, b3QueryFilter filter, IntPtr fcn, pointer context);
+    public static partial b3TreeStats b3World_OverlapAABB(b3WorldId worldId, b3AABB aabb, b3QueryFilter filter, IntPtr fcn, IntPtr context);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3World_OverlapShape(b3WorldId worldId, b3Pos origin, IntPtr proxy, b3QueryFilter filter, IntPtr fcn, pointer context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3World_OverlapShape(b3WorldId worldId, b3Pos origin, IntPtr proxy, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3World_CastRay(b3WorldId worldId, b3Pos origin, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, pointer context);
+    public static partial b3TreeStats b3World_CastRay(b3WorldId worldId, b3Pos origin, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, IntPtr context);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2808,31 +2820,31 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3World_CastShape(b3WorldId worldId, b3Pos origin, IntPtr proxy, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, pointer context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3World_CastShape(b3WorldId worldId, b3Pos origin, IntPtr proxy, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial float b3World_CastMover(b3WorldId worldId, b3Pos origin, IntPtr mover, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, pointer context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial float b3World_CastMover(b3WorldId worldId, b3Pos origin, IntPtr mover, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_CollideMover(b3WorldId worldId, b3Pos origin, IntPtr mover, b3QueryFilter filter, IntPtr fcn, pointer context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3World_CollideMover(b3WorldId worldId, b3Pos origin, IntPtr mover, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_EnableSleeping(b3WorldId worldId, _Bool flag);
+    public static partial void b3World_EnableSleeping(b3WorldId worldId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3World_IsSleepingEnabled(b3WorldId worldId);
+    public static partial box3dbool b3World_IsSleepingEnabled(b3WorldId worldId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_EnableContinuous(b3WorldId worldId, _Bool flag);
+    public static partial void b3World_EnableContinuous(b3WorldId worldId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3World_IsContinuousEnabled(b3WorldId worldId);
+    public static partial box3dbool b3World_IsContinuousEnabled(b3WorldId worldId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2852,11 +2864,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_SetCustomFilterCallback(b3WorldId worldId, IntPtr fcn, pointer context);
+    public static partial void b3World_SetCustomFilterCallback(b3WorldId worldId, IntPtr fcn, IntPtr context);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_SetPreSolveCallback(b3WorldId worldId, IntPtr fcn, pointer context);
+    public static partial void b3World_SetPreSolveCallback(b3WorldId worldId, IntPtr fcn, IntPtr context);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2892,11 +2904,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_EnableWarmStarting(b3WorldId worldId, _Bool flag);
+    public static partial void b3World_EnableWarmStarting(b3WorldId worldId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3World_IsWarmStartingEnabled(b3WorldId worldId);
+    public static partial box3dbool b3World_IsWarmStartingEnabled(b3WorldId worldId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2916,11 +2928,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_SetUserData(b3WorldId worldId, pointer userData);
+    public static partial void b3World_SetUserData(b3WorldId worldId, IntPtr userData);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial pointer b3World_GetUserData(b3WorldId worldId);
+    public static partial IntPtr b3World_GetUserData(b3WorldId worldId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2952,27 +2964,27 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_EnableSpeculative(b3WorldId worldId, _Bool flag);
+    public static partial void b3World_EnableSpeculative(b3WorldId worldId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial pointer b3CreateRecording(int byteCapacity);
+    public static partial IntPtr b3CreateRecording(int byteCapacity);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DestroyRecording(pointer recording);
+    public static partial void b3DestroyRecording(IntPtr recording);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3Recording_GetData(pointer recording); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial IntPtr b3Recording_GetData(IntPtr recording); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3Recording_GetSize(pointer recording);
+    public static partial int b3Recording_GetSize(IntPtr recording);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_StartRecording(b3WorldId worldId, pointer recording);
+    public static partial void b3World_StartRecording(b3WorldId worldId, IntPtr recording);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2980,15 +2992,15 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3SaveRecordingToFile(pointer recording, string path);
+    public static partial box3dbool b3SaveRecordingToFile(IntPtr recording, string path);
 
     [LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial pointer b3LoadRecordingFromFile(string path);
+    public static partial IntPtr b3LoadRecordingFromFile(string path);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3ValidateReplay(pointer data, int size, int workerCount);
+    public static partial box3dbool b3ValidateReplay(IntPtr data, int size, int workerCount);
 
     [StructLayout(LayoutKind.Sequential)]
     public struct b3RecPlayerInfo
@@ -3003,99 +3015,99 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial pointer b3RecPlayer_Create(pointer data, int size, int workerCount);
+    public static partial IntPtr b3RecPlayer_Create(IntPtr data, int size, int workerCount);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RecPlayer_Destroy(pointer player);
+    public static partial void b3RecPlayer_Destroy(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3RecPlayer_StepFrame(pointer player);
+    public static partial box3dbool b3RecPlayer_StepFrame(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RecPlayer_SubStepFrame(pointer player);
+    public static partial void b3RecPlayer_SubStepFrame(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RecPlayer_Restart(pointer player);
+    public static partial void b3RecPlayer_Restart(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RecPlayer_SeekFrame(pointer player, int targetFrame);
+    public static partial void b3RecPlayer_SeekFrame(IntPtr player, int targetFrame);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3WorldId b3RecPlayer_GetWorldId(pointer player);
+    public static partial b3WorldId b3RecPlayer_GetWorldId(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3RecPlayer_GetFrame(pointer player);
+    public static partial int b3RecPlayer_GetFrame(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3RecPlayer_GetFrameCount(pointer player);
+    public static partial int b3RecPlayer_GetFrameCount(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3RecPlayer_IsAtEnd(pointer player);
+    public static partial box3dbool b3RecPlayer_IsAtEnd(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3RecPlayer_IsAtPreStep(pointer player);
+    public static partial box3dbool b3RecPlayer_IsAtPreStep(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3RecPlayer_HasDiverged(pointer player);
+    public static partial box3dbool b3RecPlayer_HasDiverged(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3RecPlayerInfo b3RecPlayer_GetInfo(pointer player);
+    public static partial b3RecPlayerInfo b3RecPlayer_GetInfo(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3RecPlayer_GetDivergeFrame(pointer player);
+    public static partial int b3RecPlayer_GetDivergeFrame(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RecPlayer_SetWorkerCount(pointer player, int count);
+    public static partial void b3RecPlayer_SetWorkerCount(IntPtr player, int count);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RecPlayer_SetKeyframePolicy(pointer player, size_t budgetBytes, int minIntervalFrames);
+    public static partial void b3RecPlayer_SetKeyframePolicy(IntPtr player, UIntPtr budgetBytes, int minIntervalFrames);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial size_t b3RecPlayer_GetKeyframeBudget(pointer player);
+    public static partial UIntPtr b3RecPlayer_GetKeyframeBudget(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3RecPlayer_GetKeyframeMinInterval(pointer player);
+    public static partial int b3RecPlayer_GetKeyframeMinInterval(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3RecPlayer_GetKeyframeInterval(pointer player);
+    public static partial int b3RecPlayer_GetKeyframeInterval(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial size_t b3RecPlayer_GetKeyframeBytes(pointer player);
+    public static partial UIntPtr b3RecPlayer_GetKeyframeBytes(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3RecPlayer_GetBodyCount(pointer player);
+    public static partial int b3RecPlayer_GetBodyCount(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3BodyId b3RecPlayer_GetBodyId(pointer player, int index);
+    public static partial b3BodyId b3RecPlayer_GetBodyId(IntPtr player, int index);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RecPlayer_SetDebugShapeCallbacks(pointer player, IntPtr createDebugShape, IntPtr destroyDebugShape, pointer context);
+    public static partial void b3RecPlayer_SetDebugShapeCallbacks(IntPtr player, IntPtr createDebugShape, IntPtr destroyDebugShape, IntPtr context);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RecPlayer_DrawFrameQueries(pointer player, IntPtr draw, int queryIndex, int selectedIndex); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3RecPlayer_DrawFrameQueries(IntPtr player, IntPtr draw, int queryIndex, int selectedIndex); // WARN_UNKNOWN_POINTER_PARAMETER
 
     public enum b3RecQueryType
     {
@@ -3117,8 +3129,8 @@ public static unsafe partial class Interop
         public b3Pos origin;
         public b3Vec3 translation;
         public int hitCount;
-        public uint64_t key;
-        public uint64_t id;
+        public ulong key;
+        public ulong id;
         public byte* name;
     }
 
@@ -3133,15 +3145,15 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3RecPlayer_GetFrameQueryCount(pointer player);
+    public static partial int b3RecPlayer_GetFrameQueryCount(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3RecQueryInfo b3RecPlayer_GetFrameQuery(pointer player, int index);
+    public static partial b3RecQueryInfo b3RecPlayer_GetFrameQuery(IntPtr player, int index);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3RecQueryHit b3RecPlayer_GetFrameQueryHit(pointer player, int queryIndex, int hitIndex);
+    public static partial b3RecQueryHit b3RecPlayer_GetFrameQueryHit(IntPtr player, int queryIndex, int hitIndex);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3153,7 +3165,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Body_IsValid(b3BodyId id);
+    public static partial box3dbool b3Body_IsValid(b3BodyId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3174,11 +3186,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_SetUserData(b3BodyId bodyId, pointer userData);
+    public static partial void b3Body_SetUserData(b3BodyId bodyId, IntPtr userData);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial pointer b3Body_GetUserData(b3BodyId bodyId);
+    public static partial IntPtr b3Body_GetUserData(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3230,7 +3242,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_SetTargetTransform(b3BodyId bodyId, b3WorldTransform target, float timeStep, _Bool wake);
+    public static partial void b3Body_SetTargetTransform(b3BodyId bodyId, b3WorldTransform target, float timeStep, box3dbool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3242,27 +3254,27 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyForce(b3BodyId bodyId, b3Vec3 force, b3Pos point, _Bool wake);
+    public static partial void b3Body_ApplyForce(b3BodyId bodyId, b3Vec3 force, b3Pos point, box3dbool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyForceToCenter(b3BodyId bodyId, b3Vec3 force, _Bool wake);
+    public static partial void b3Body_ApplyForceToCenter(b3BodyId bodyId, b3Vec3 force, box3dbool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyTorque(b3BodyId bodyId, b3Vec3 torque, _Bool wake);
+    public static partial void b3Body_ApplyTorque(b3BodyId bodyId, b3Vec3 torque, box3dbool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyLinearImpulse(b3BodyId bodyId, b3Vec3 impulse, b3Pos point, _Bool wake);
+    public static partial void b3Body_ApplyLinearImpulse(b3BodyId bodyId, b3Vec3 impulse, b3Pos point, box3dbool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyLinearImpulseToCenter(b3BodyId bodyId, b3Vec3 impulse, _Bool wake);
+    public static partial void b3Body_ApplyLinearImpulseToCenter(b3BodyId bodyId, b3Vec3 impulse, box3dbool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyAngularImpulse(b3BodyId bodyId, b3Vec3 impulse, _Bool wake);
+    public static partial void b3Body_ApplyAngularImpulse(b3BodyId bodyId, b3Vec3 impulse, box3dbool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3326,19 +3338,19 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Body_IsAwake(b3BodyId bodyId);
+    public static partial box3dbool b3Body_IsAwake(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_SetAwake(b3BodyId bodyId, _Bool awake);
+    public static partial void b3Body_SetAwake(b3BodyId bodyId, box3dbool awake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_EnableSleep(b3BodyId bodyId, _Bool enableSleep);
+    public static partial void b3Body_EnableSleep(b3BodyId bodyId, box3dbool enableSleep);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Body_IsSleepEnabled(b3BodyId bodyId);
+    public static partial box3dbool b3Body_IsSleepEnabled(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3350,7 +3362,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Body_IsEnabled(b3BodyId bodyId);
+    public static partial box3dbool b3Body_IsEnabled(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3370,31 +3382,31 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_SetBullet(b3BodyId bodyId, _Bool flag);
+    public static partial void b3Body_SetBullet(b3BodyId bodyId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Body_IsBullet(b3BodyId bodyId);
+    public static partial box3dbool b3Body_IsBullet(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_AllowFastRotation(b3BodyId bodyId, _Bool flag);
+    public static partial void b3Body_AllowFastRotation(b3BodyId bodyId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Body_IsFastRotationAllowed(b3BodyId bodyId);
+    public static partial box3dbool b3Body_IsFastRotationAllowed(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_EnableContactRecycling(b3BodyId bodyId, _Bool flag);
+    public static partial void b3Body_EnableContactRecycling(b3BodyId bodyId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Body_IsContactRecyclingEnabled(b3BodyId bodyId);
+    public static partial box3dbool b3Body_IsContactRecyclingEnabled(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_EnableHitEvents(b3BodyId bodyId, _Bool flag);
+    public static partial void b3Body_EnableHitEvents(b3BodyId bodyId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3438,11 +3450,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3BodyCastResult b3Body_CastShape(b3BodyId bodyId, b3Pos origin, IntPtr proxy, b3Vec3 translation, b3QueryFilter filter, float maxFraction, _Bool canEncroach, b3WorldTransform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3BodyCastResult b3Body_CastShape(b3BodyId bodyId, b3Pos origin, IntPtr proxy, b3Vec3 translation, b3QueryFilter filter, float maxFraction, box3dbool canEncroach, b3WorldTransform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Body_OverlapShape(b3BodyId bodyId, b3Pos origin, IntPtr proxy, b3QueryFilter filter, b3WorldTransform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial box3dbool b3Body_OverlapShape(b3BodyId bodyId, b3Pos origin, IntPtr proxy, b3QueryFilter filter, b3WorldTransform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3478,11 +3490,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DestroyShape(b3ShapeId shapeId, _Bool updateBodyMass);
+    public static partial void b3DestroyShape(b3ShapeId shapeId, box3dbool updateBodyMass);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Shape_IsValid(b3ShapeId id);
+    public static partial box3dbool b3Shape_IsValid(b3ShapeId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3498,7 +3510,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Shape_IsSensor(b3ShapeId shapeId);
+    public static partial box3dbool b3Shape_IsSensor(b3ShapeId shapeId);
 
     [LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3511,15 +3523,15 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_SetUserData(b3ShapeId shapeId, pointer userData);
+    public static partial void b3Shape_SetUserData(b3ShapeId shapeId, IntPtr userData);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial pointer b3Shape_GetUserData(b3ShapeId shapeId);
+    public static partial IntPtr b3Shape_GetUserData(b3ShapeId shapeId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_SetDensity(b3ShapeId shapeId, float density, _Bool updateBodyMass);
+    public static partial void b3Shape_SetDensity(b3ShapeId shapeId, float density, box3dbool updateBodyMass);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3567,39 +3579,39 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_SetFilter(b3ShapeId shapeId, b3Filter filter, _Bool invokeContacts);
+    public static partial void b3Shape_SetFilter(b3ShapeId shapeId, b3Filter filter, box3dbool invokeContacts);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_EnableSensorEvents(b3ShapeId shapeId, _Bool flag);
+    public static partial void b3Shape_EnableSensorEvents(b3ShapeId shapeId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Shape_AreSensorEventsEnabled(b3ShapeId shapeId);
+    public static partial box3dbool b3Shape_AreSensorEventsEnabled(b3ShapeId shapeId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_EnableContactEvents(b3ShapeId shapeId, _Bool flag);
+    public static partial void b3Shape_EnableContactEvents(b3ShapeId shapeId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Shape_AreContactEventsEnabled(b3ShapeId shapeId);
+    public static partial box3dbool b3Shape_AreContactEventsEnabled(b3ShapeId shapeId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_EnablePreSolveEvents(b3ShapeId shapeId, _Bool flag);
+    public static partial void b3Shape_EnablePreSolveEvents(b3ShapeId shapeId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Shape_ArePreSolveEventsEnabled(b3ShapeId shapeId);
+    public static partial box3dbool b3Shape_ArePreSolveEventsEnabled(b3ShapeId shapeId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_EnableHitEvents(b3ShapeId shapeId, _Bool flag);
+    public static partial void b3Shape_EnableHitEvents(b3ShapeId shapeId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Shape_AreHitEventsEnabled(b3ShapeId shapeId);
+    public static partial box3dbool b3Shape_AreHitEventsEnabled(b3ShapeId shapeId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3671,15 +3683,15 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_ApplyWind(b3ShapeId shapeId, b3Vec3 wind, float drag, float lift, float maxSpeed, _Bool wake);
+    public static partial void b3Shape_ApplyWind(b3ShapeId shapeId, b3Vec3 wind, float drag, float lift, float maxSpeed, box3dbool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DestroyJoint(b3JointId jointId, _Bool wakeAttached);
+    public static partial void b3DestroyJoint(b3JointId jointId, box3dbool wakeAttached);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Joint_IsValid(b3JointId id);
+    public static partial box3dbool b3Joint_IsValid(b3JointId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3715,19 +3727,19 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Joint_SetCollideConnected(b3JointId jointId, _Bool shouldCollide);
+    public static partial void b3Joint_SetCollideConnected(b3JointId jointId, box3dbool shouldCollide);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Joint_GetCollideConnected(b3JointId jointId);
+    public static partial box3dbool b3Joint_GetCollideConnected(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Joint_SetUserData(b3JointId jointId, pointer userData);
+    public static partial void b3Joint_SetUserData(b3JointId jointId, IntPtr userData);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial pointer b3Joint_GetUserData(b3JointId jointId);
+    public static partial IntPtr b3Joint_GetUserData(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3815,11 +3827,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DistanceJoint_EnableSpring(b3JointId jointId, _Bool enableSpring);
+    public static partial void b3DistanceJoint_EnableSpring(b3JointId jointId, box3dbool enableSpring);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3DistanceJoint_IsSpringEnabled(b3JointId jointId);
+    public static partial box3dbool b3DistanceJoint_IsSpringEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3847,11 +3859,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DistanceJoint_EnableLimit(b3JointId jointId, _Bool enableLimit);
+    public static partial void b3DistanceJoint_EnableLimit(b3JointId jointId, box3dbool enableLimit);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3DistanceJoint_IsLimitEnabled(b3JointId jointId);
+    public static partial box3dbool b3DistanceJoint_IsLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3871,11 +3883,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DistanceJoint_EnableMotor(b3JointId jointId, _Bool enableMotor);
+    public static partial void b3DistanceJoint_EnableMotor(b3JointId jointId, box3dbool enableMotor);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3DistanceJoint_IsMotorEnabled(b3JointId jointId);
+    public static partial box3dbool b3DistanceJoint_IsMotorEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3991,11 +4003,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3PrismaticJoint_EnableSpring(b3JointId jointId, _Bool enableSpring);
+    public static partial void b3PrismaticJoint_EnableSpring(b3JointId jointId, box3dbool enableSpring);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3PrismaticJoint_IsSpringEnabled(b3JointId jointId);
+    public static partial box3dbool b3PrismaticJoint_IsSpringEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4023,11 +4035,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3PrismaticJoint_EnableLimit(b3JointId jointId, _Bool enableLimit);
+    public static partial void b3PrismaticJoint_EnableLimit(b3JointId jointId, box3dbool enableLimit);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3PrismaticJoint_IsLimitEnabled(b3JointId jointId);
+    public static partial box3dbool b3PrismaticJoint_IsLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4043,11 +4055,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3PrismaticJoint_EnableMotor(b3JointId jointId, _Bool enableMotor);
+    public static partial void b3PrismaticJoint_EnableMotor(b3JointId jointId, box3dbool enableMotor);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3PrismaticJoint_IsMotorEnabled(b3JointId jointId);
+    public static partial box3dbool b3PrismaticJoint_IsMotorEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4083,11 +4095,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RevoluteJoint_EnableSpring(b3JointId jointId, _Bool enableSpring);
+    public static partial void b3RevoluteJoint_EnableSpring(b3JointId jointId, box3dbool enableSpring);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3RevoluteJoint_IsSpringEnabled(b3JointId jointId);
+    public static partial box3dbool b3RevoluteJoint_IsSpringEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4119,11 +4131,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RevoluteJoint_EnableLimit(b3JointId jointId, _Bool enableLimit);
+    public static partial void b3RevoluteJoint_EnableLimit(b3JointId jointId, box3dbool enableLimit);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3RevoluteJoint_IsLimitEnabled(b3JointId jointId);
+    public static partial box3dbool b3RevoluteJoint_IsLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4139,11 +4151,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RevoluteJoint_EnableMotor(b3JointId jointId, _Bool enableMotor);
+    public static partial void b3RevoluteJoint_EnableMotor(b3JointId jointId, box3dbool enableMotor);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3RevoluteJoint_IsMotorEnabled(b3JointId jointId);
+    public static partial box3dbool b3RevoluteJoint_IsMotorEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4171,11 +4183,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3SphericalJoint_EnableConeLimit(b3JointId jointId, _Bool enableLimit);
+    public static partial void b3SphericalJoint_EnableConeLimit(b3JointId jointId, box3dbool enableLimit);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3SphericalJoint_IsConeLimitEnabled(b3JointId jointId);
+    public static partial box3dbool b3SphericalJoint_IsConeLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4191,11 +4203,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3SphericalJoint_EnableTwistLimit(b3JointId jointId, _Bool enableLimit);
+    public static partial void b3SphericalJoint_EnableTwistLimit(b3JointId jointId, box3dbool enableLimit);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3SphericalJoint_IsTwistLimitEnabled(b3JointId jointId);
+    public static partial box3dbool b3SphericalJoint_IsTwistLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4215,11 +4227,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3SphericalJoint_EnableSpring(b3JointId jointId, _Bool enableSpring);
+    public static partial void b3SphericalJoint_EnableSpring(b3JointId jointId, box3dbool enableSpring);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3SphericalJoint_IsSpringEnabled(b3JointId jointId);
+    public static partial box3dbool b3SphericalJoint_IsSpringEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4247,11 +4259,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3SphericalJoint_EnableMotor(b3JointId jointId, _Bool enableMotor);
+    public static partial void b3SphericalJoint_EnableMotor(b3JointId jointId, box3dbool enableMotor);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3SphericalJoint_IsMotorEnabled(b3JointId jointId);
+    public static partial box3dbool b3SphericalJoint_IsMotorEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4315,11 +4327,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3WheelJoint_EnableSuspension(b3JointId jointId, _Bool flag);
+    public static partial void b3WheelJoint_EnableSuspension(b3JointId jointId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3WheelJoint_IsSuspensionEnabled(b3JointId jointId);
+    public static partial box3dbool b3WheelJoint_IsSuspensionEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4339,11 +4351,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3WheelJoint_EnableSuspensionLimit(b3JointId jointId, _Bool flag);
+    public static partial void b3WheelJoint_EnableSuspensionLimit(b3JointId jointId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3WheelJoint_IsSuspensionLimitEnabled(b3JointId jointId);
+    public static partial box3dbool b3WheelJoint_IsSuspensionLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4359,11 +4371,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3WheelJoint_EnableSpinMotor(b3JointId jointId, _Bool flag);
+    public static partial void b3WheelJoint_EnableSpinMotor(b3JointId jointId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3WheelJoint_IsSpinMotorEnabled(b3JointId jointId);
+    public static partial box3dbool b3WheelJoint_IsSpinMotorEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4391,11 +4403,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3WheelJoint_EnableSteering(b3JointId jointId, _Bool flag);
+    public static partial void b3WheelJoint_EnableSteering(b3JointId jointId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3WheelJoint_IsSteeringEnabled(b3JointId jointId);
+    public static partial box3dbool b3WheelJoint_IsSteeringEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4423,11 +4435,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3WheelJoint_EnableSteeringLimit(b3JointId jointId, _Bool flag);
+    public static partial void b3WheelJoint_EnableSteeringLimit(b3JointId jointId, box3dbool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3WheelJoint_IsSteeringLimitEnabled(b3JointId jointId);
+    public static partial box3dbool b3WheelJoint_IsSteeringLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4459,7 +4471,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial _Bool b3Contact_IsValid(b3ContactId id);
+    public static partial box3dbool b3Contact_IsValid(b3ContactId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

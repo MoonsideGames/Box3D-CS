@@ -731,11 +731,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3StoreContactId(b3ContactId id, INLINE_ARRAY values);
+    public static partial void b3StoreContactId(b3ContactId id, [Out] uint[] values);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3ContactId b3LoadContactId(INLINE_ARRAY values);
+    public static partial b3ContactId b3LoadContactId([Out] uint[] values);
 
     // ../box3d/include/box3d/types.h
 
@@ -2027,7 +2027,7 @@ public static unsafe partial class Interop
         public int i3;
         public float squaredDistance;
         public b3TriangleFeature feature;
-public int triangleFlags;
+        public int triangleFlags;
     }
 
     public enum b3HexColor

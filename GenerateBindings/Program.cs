@@ -460,6 +460,10 @@ internal static partial class Program
                                 typeName = $"{componentType.Tag}";
                             }
                         }
+                        else if (typeName == "INLINE_ARRAY")
+                        {
+                            typeName = $"[Out] {CSharpTypeFromFFI(componentType.Type!, TypeContext.FunctionData)}[]";
+                        }
                     }
 
                     if (isReturn)

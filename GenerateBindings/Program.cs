@@ -59,6 +59,7 @@ internal static partial class Program
 
     private static readonly List<string> DefinedTypes = new();
     private static readonly Dictionary<string, RawFFIEntry> TypedefMap = new();
+    private static readonly Dictionary<uint, RawFFIEntry> AnonymousTypeIDMap = new();
     private static readonly HashSet<string> UnusedUserProvidedTypes = new();
     private static readonly Dictionary<string, string> ReservedWords = new()
     {
@@ -137,6 +138,18 @@ internal static partial class Program
             {
                 TypedefMap[entry.Name!] = entry.Type!;
             }
+
+            // Anonymous enum lookup
+            if ((entry.Tag == "enum") && entry.Name == "" && entry.ID.HasValue)
+            {
+                foreach (var otherEntry in ffiData)
+                {
+                    if (otherEntry.Type?.ID == entry.ID)
+                    {
+                        AnonymousTypeIDMap.Add(entry.ID.Value, otherEntry);
+                    }
+                }
+            }
         }
 
         var definitions = new StringBuilder();
@@ -171,18 +184,9 @@ internal static partial class Program
                 string name = entry.Name!;
 
                 // if the enum is anonymously typedef'd, we have to search for the typedef name
-                // TODO: we can optimize this by doing a pre-pass to cache IDs
-                if (name == "")
+                if (name == "" && entry.ID.HasValue)
                 {
-                    var id = entry.ID;
-                    foreach (var otherEntry in ffiData)
-                    {
-                        if (otherEntry.Type?.ID == id)
-                        {
-                            name = otherEntry.Name!;
-                            break;
-                        }
-                    }
+                    name = AnonymousTypeIDMap[entry.ID.Value].Name!;
                 }
 
                 definitions.Append($"public enum {name}\n{{\n");
@@ -1133,6 +1137,17 @@ public static unsafe class box
                     (
                         byteOffset + (uint) field.BitOffset! / 8,
                         $"public {internalStructName} {fieldName};"
+                    )
+                );
+            }
+            else if (fieldTypeName == "" && fieldTypedef.Tag == "enum" && fieldTypedef.ID.HasValue)
+            {
+                // if the enum is anonymously typedef'd, we have to search for the typedef name
+                var type = AnonymousTypeIDMap[fieldTypedef.ID.Value];
+                StructDefinition.OffsetFields.Add(
+                    (
+                        byteOffset + (uint) field.BitOffset! / 8,
+                        $"public {type.Name} {fieldName};"
                     )
                 );
             }

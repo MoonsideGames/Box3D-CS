@@ -11,7 +11,7 @@ internal class RawFFIEntry
     public uint? ID { get; }
 
     [JsonPropertyName("name")]
-    public string? Name { get; }
+    public string? Name { get; set; }
 
     [JsonPropertyName("location")]
     public string? Header { get; }

@@ -128,7 +128,7 @@ internal static partial class Program
 
         foreach (var entry in ffiData)
         {
-            if ((entry.Header == null) || !Path.GetFileName(entry.Header).StartsWith("b3"))
+            if ((entry.Header == null) || !entry.Header.Contains("box3d"))
             {
                 continue;
             }
@@ -1007,8 +1007,10 @@ public static unsafe class box
             "_Bool"            => "box3dbool",
             "uint8_t"          => "byte",
             "Sint8"            => "sbyte",
+            "int16_t"          => "short",
             "Sint16"           => "short",
             "int"              => "int",
+            "int32_t"          => "int",
             "Sint32"           => "int",
             "long"             => "long",
             "Sint64"           => "long",
@@ -1031,7 +1033,7 @@ public static unsafe class box
             "struct"           => type.Name!,
             "array"            => "INLINE_ARRAY",
             "union"            => type.Name!,
-            _                  => type.Tag,
+            _                  => type.Tag
         };
     }
 

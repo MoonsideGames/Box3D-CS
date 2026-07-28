@@ -422,11 +422,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Pos b3ToPos(b3Vec3 v);
+    public static partial b3Vec3 b3ToPos(b3Vec3 v);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Vec3 b3ToVec3(b3Pos p);
+    public static partial b3Vec3 b3ToVec3(b3Vec3 p);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -438,43 +438,43 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Vec3 b3SubPos(b3Pos a, b3Pos b);
+    public static partial b3Vec3 b3SubPos(b3Vec3 a, b3Vec3 b);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Pos b3OffsetPos(b3Pos p, b3Vec3 d);
+    public static partial b3Vec3 b3OffsetPos(b3Vec3 p, b3Vec3 d);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Pos b3LerpPosition(b3Pos a, b3Pos b, float t);
+    public static partial b3Vec3 b3LerpPosition(b3Vec3 a, b3Vec3 b, float t);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Pos b3TransformWorldPoint(b3WorldTransform t, b3Vec3 p);
+    public static partial b3Vec3 b3TransformWorldPoint(b3Transform t, b3Vec3 p);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Vec3 b3InvTransformWorldPoint(b3WorldTransform t, b3Pos p);
+    public static partial b3Vec3 b3InvTransformWorldPoint(b3Transform t, b3Vec3 p);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Transform b3InvMulWorldTransforms(b3WorldTransform A, b3WorldTransform B);
+    public static partial b3Transform b3InvMulWorldTransforms(b3Transform A, b3Transform B);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3WorldTransform b3MulWorldTransforms(b3WorldTransform A, b3Transform B);
+    public static partial b3Transform b3MulWorldTransforms(b3Transform A, b3Transform B);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Transform b3ToRelativeTransform(b3WorldTransform t, b3Pos @base);
+    public static partial b3Transform b3ToRelativeTransform(b3Transform t, b3Vec3 @base);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3WorldTransform b3MakeWorldTransform(b3Transform t);
+    public static partial b3Transform b3MakeWorldTransform(b3Transform t);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3AABB b3OffsetAABB(b3AABB localBox, b3Pos origin);
+    public static partial b3AABB b3OffsetAABB(b3AABB localBox, b3Vec3 origin);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -631,11 +631,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsValidPosition(b3Pos p);
+    public static partial box3dbool b3IsValidPosition(b3Vec3 p);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsValidWorldTransform(b3WorldTransform t);
+    public static partial box3dbool b3IsValidWorldTransform(b3Transform t);
 
     // ../box3d/include/box3d/constants.h
 
@@ -667,7 +667,7 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3BodyId
     {
-        public int32_t index1;
+        public int index1;
         public ushort world0;
         public ushort generation;
     }
@@ -675,7 +675,7 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3ShapeId
     {
-        public int32_t index1;
+        public int index1;
         public ushort world0;
         public ushort generation;
     }
@@ -683,7 +683,7 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3JointId
     {
-        public int32_t index1;
+        public int index1;
         public ushort world0;
         public ushort generation;
     }
@@ -691,9 +691,9 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3ContactId
     {
-        public int32_t index1;
+        public int index1;
         public ushort world0;
-        public int16_t padding;
+        public short padding;
         public uint generation;
     }
 
@@ -802,7 +802,7 @@ public static unsafe partial class Interop
     public struct b3BodyDef
     {
         public b3BodyType type;
-        public b3Pos position;
+        public b3Vec3 position;
         public b3Quat rotation;
         public b3Vec3 linearVelocity;
         public b3Vec3 angularVelocity;
@@ -1147,7 +1147,7 @@ public static unsafe partial class Interop
     public struct b3ExplosionDef
     {
         public ulong maskBits;
-        public b3Pos position;
+        public b3Vec3 position;
         public float radius;
         public float falloff;
         public float impulsePerArea;
@@ -1202,7 +1202,7 @@ public static unsafe partial class Interop
         public b3ShapeId shapeIdA;
         public b3ShapeId shapeIdB;
         public b3ContactId contactId;
-        public b3Pos point;
+        public b3Vec3 point;
         public b3Vec3 normal;
         public float approachSpeed;
         public ulong userMaterialIdA;
@@ -1224,7 +1224,7 @@ public static unsafe partial class Interop
     public struct b3BodyMoveEvent
     {
         public IntPtr userData;
-        public b3WorldTransform transform;
+        public b3Transform transform;
         public b3BodyId bodyId;
         public box3dbool fellAsleep;
     }
@@ -1285,7 +1285,7 @@ public static unsafe partial class Interop
     public struct b3RayResult
     {
         public b3ShapeId shapeId;
-        public b3Pos point;
+        public b3Vec3 point;
         public b3Vec3 normal;
         public ulong userMaterialId;
         public float fraction;
@@ -1338,7 +1338,7 @@ public static unsafe partial class Interop
     public struct b3BodyCastResult
     {
         public b3ShapeId shapeId;
-        public b3Pos point;
+        public b3Vec3 point;
         public b3Vec3 normal;
         public float fraction;
         public int triangleIndex;
@@ -1686,7 +1686,7 @@ public static unsafe partial class Interop
     public struct b3MeshDef
     {
         public b3Vec3* vertices;
-        public int32_t* indices;
+        public int* indices;
         public byte* materialIndices;
         public float weldTolerance;
         public int vertexCount;
@@ -1730,9 +1730,9 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3MeshTriangle
     {
-        public int32_t index1;
-        public int32_t index2;
-        public int32_t index3;
+        public int index1;
+        public int index2;
+        public int index3;
     }
 
     [StructLayout(LayoutKind.Explicit)]
@@ -2027,7 +2027,7 @@ public static unsafe partial class Interop
         public int i3;
         public float squaredDistance;
         public b3TriangleFeature feature;
-        public int triangleFlags;
+public int triangleFlags;
     }
 
     public enum b3HexColor
@@ -2808,27 +2808,27 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3World_OverlapShape(b3WorldId worldId, b3Pos origin, IntPtr proxy, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3World_OverlapShape(b3WorldId worldId, b3Vec3 origin, IntPtr proxy, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3World_CastRay(b3WorldId worldId, b3Pos origin, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, IntPtr context);
+    public static partial b3TreeStats b3World_CastRay(b3WorldId worldId, b3Vec3 origin, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, IntPtr context);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3RayResult b3World_CastRayClosest(b3WorldId worldId, b3Pos origin, b3Vec3 translation, b3QueryFilter filter);
+    public static partial b3RayResult b3World_CastRayClosest(b3WorldId worldId, b3Vec3 origin, b3Vec3 translation, b3QueryFilter filter);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3World_CastShape(b3WorldId worldId, b3Pos origin, IntPtr proxy, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3World_CastShape(b3WorldId worldId, b3Vec3 origin, IntPtr proxy, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial float b3World_CastMover(b3WorldId worldId, b3Pos origin, IntPtr mover, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial float b3World_CastMover(b3WorldId worldId, b3Vec3 origin, IntPtr mover, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_CollideMover(b3WorldId worldId, b3Pos origin, IntPtr mover, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3World_CollideMover(b3WorldId worldId, b3Vec3 origin, IntPtr mover, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3126,7 +3126,7 @@ public static unsafe partial class Interop
         public b3RecQueryType type;
         public b3QueryFilter filter;
         public b3AABB aabb;
-        public b3Pos origin;
+        public b3Vec3 origin;
         public b3Vec3 translation;
         public int hitCount;
         public ulong key;
@@ -3138,7 +3138,7 @@ public static unsafe partial class Interop
     public struct b3RecQueryHit
     {
         public b3ShapeId shape;
-        public b3Pos point;
+        public b3Vec3 point;
         public b3Vec3 normal;
         public float fraction;
     }
@@ -3194,7 +3194,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Pos b3Body_GetPosition(b3BodyId bodyId);
+    public static partial b3Vec3 b3Body_GetPosition(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3202,19 +3202,19 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3WorldTransform b3Body_GetTransform(b3BodyId bodyId);
+    public static partial b3Transform b3Body_GetTransform(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_SetTransform(b3BodyId bodyId, b3Pos position, b3Quat rotation);
+    public static partial void b3Body_SetTransform(b3BodyId bodyId, b3Vec3 position, b3Quat rotation);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Vec3 b3Body_GetLocalPoint(b3BodyId bodyId, b3Pos worldPoint);
+    public static partial b3Vec3 b3Body_GetLocalPoint(b3BodyId bodyId, b3Vec3 worldPoint);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Pos b3Body_GetWorldPoint(b3BodyId bodyId, b3Vec3 localPoint);
+    public static partial b3Vec3 b3Body_GetWorldPoint(b3BodyId bodyId, b3Vec3 localPoint);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3242,7 +3242,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_SetTargetTransform(b3BodyId bodyId, b3WorldTransform target, float timeStep, box3dbool wake);
+    public static partial void b3Body_SetTargetTransform(b3BodyId bodyId, b3Transform target, float timeStep, box3dbool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3250,11 +3250,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Vec3 b3Body_GetWorldPointVelocity(b3BodyId bodyId, b3Pos worldPoint);
+    public static partial b3Vec3 b3Body_GetWorldPointVelocity(b3BodyId bodyId, b3Vec3 worldPoint);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyForce(b3BodyId bodyId, b3Vec3 force, b3Pos point, box3dbool wake);
+    public static partial void b3Body_ApplyForce(b3BodyId bodyId, b3Vec3 force, b3Vec3 point, box3dbool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3266,7 +3266,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyLinearImpulse(b3BodyId bodyId, b3Vec3 impulse, b3Pos point, box3dbool wake);
+    public static partial void b3Body_ApplyLinearImpulse(b3BodyId bodyId, b3Vec3 impulse, b3Vec3 point, box3dbool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3298,7 +3298,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Pos b3Body_GetWorldCenter(b3BodyId bodyId);
+    public static partial b3Vec3 b3Body_GetWorldCenter(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3446,19 +3446,19 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3BodyCastResult b3Body_CastRay(b3BodyId bodyId, b3Pos origin, b3Vec3 translation, b3QueryFilter filter, float maxFraction, b3WorldTransform bodyTransform);
+    public static partial b3BodyCastResult b3Body_CastRay(b3BodyId bodyId, b3Vec3 origin, b3Vec3 translation, b3QueryFilter filter, float maxFraction, b3Transform bodyTransform);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3BodyCastResult b3Body_CastShape(b3BodyId bodyId, b3Pos origin, IntPtr proxy, b3Vec3 translation, b3QueryFilter filter, float maxFraction, box3dbool canEncroach, b3WorldTransform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3BodyCastResult b3Body_CastShape(b3BodyId bodyId, b3Vec3 origin, IntPtr proxy, b3Vec3 translation, b3QueryFilter filter, float maxFraction, box3dbool canEncroach, b3Transform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Body_OverlapShape(b3BodyId bodyId, b3Pos origin, IntPtr proxy, b3QueryFilter filter, b3WorldTransform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial box3dbool b3Body_OverlapShape(b3BodyId bodyId, b3Vec3 origin, IntPtr proxy, b3QueryFilter filter, b3Transform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3Body_CollideMover(b3BodyId bodyId, IntPtr bodyPlanes, int planeCapacity, b3Pos origin, IntPtr mover, b3QueryFilter filter, b3WorldTransform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial int b3Body_CollideMover(b3BodyId bodyId, IntPtr bodyPlanes, int planeCapacity, b3Vec3 origin, IntPtr mover, b3QueryFilter filter, b3Transform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3615,7 +3615,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3WorldCastOutput b3Shape_RayCast(b3ShapeId shapeId, b3Pos origin, b3Vec3 translation);
+    public static partial b3CastOutput b3Shape_RayCast(b3ShapeId shapeId, b3Vec3 origin, b3Vec3 translation);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

@@ -1451,15 +1451,8 @@ public static unsafe partial class Interop
         public box3dbool usedFallback;
     }
 
-    public enum b3TreeNodeFlags
-    {
-        b3_allocatedNode = 1,
-        b3_enlargedNode = 2,
-        b3_leafNode = 4,
-    }
-
     [Flags]
-    public enum b3TreeNodeFlags : b3TreeNodeFlags
+    public enum b3TreeNodeFlags : uint
     {
         b3_allocatedNode = 0x0001,
         b3_enlargedNode = 0x0002,
@@ -1696,23 +1689,8 @@ public static unsafe partial class Interop
         public box3dbool identifyEdges;
     }
 
-    public enum b3MeshEdgeFlags
-    {
-        b3_concaveEdge1 = 1,
-        b3_concaveEdge2 = 2,
-        b3_concaveEdge3 = 4,
-        b3_inverseConcaveEdge1 = 16,
-        b3_inverseConcaveEdge2 = 32,
-        b3_inverseConcaveEdge3 = 64,
-        b3_allConcaveEdges = 7,
-        b3_flatEdge1 = 17,
-        b3_flatEdge2 = 34,
-        b3_flatEdge3 = 68,
-        b3_allFlatEdges = 119,
-    }
-
     [Flags]
-    public enum b3MeshEdgeFlags : b3MeshEdgeFlags
+    public enum b3MeshEdgeFlags : uint
     {
         b3_concaveEdge1 = 0x01,
         b3_concaveEdge2 = 0x02,

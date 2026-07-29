@@ -184,7 +184,7 @@ internal static partial class Program
                 currentSourceFile = headerFile;
             }
 
-            if (entry.Tag == "enum")
+            if (entry.Tag == "enum" && !IsFlagType(entry.Name!))
             {
                 string name = entry.Name!;
 
@@ -204,7 +204,6 @@ internal static partial class Program
 
                 definitions.Append("}\n\n");
             }
-
             else if (entry.Tag == "typedef")
             {
                 if (entry.Type!.Tag == "function-pointer")
@@ -256,6 +255,11 @@ internal static partial class Program
                 {
                     definitions.Append("[Flags]\n");
                     var enumType = CSharpTypeFromFFI(type: entry.Type!, TypeContext.StructField);
+                    if (enumType == entry.Type!.Name)
+                    {
+                        // if no flag type is defined, just assume uint
+                        enumType = "uint";
+                    }
                     definitions.Append($"public enum {entry.Name} : {enumType}\n{{\n");
 
                     if (!UserProvidedData.FlagEnumDefinitions.TryGetValue(entry.Name, value: out var enumValues))

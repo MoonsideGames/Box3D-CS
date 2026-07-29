@@ -40,6 +40,9 @@ internal class RawFFIEntry
     [JsonPropertyName("bit-size")]
     public uint? BitSize { get; }
 
+    [JsonPropertyName("width")]
+    public uint? Width { get; }
+
     [JsonConstructor]
     public RawFFIEntry(
         string tag,
@@ -53,7 +56,8 @@ internal class RawFFIEntry
         RawFFIEntry? returnType,
         uint? size,
         uint? bitOffset,
-        uint? bitSize
+        uint? bitSize,
+        uint? width
     )
     {
         Tag = tag.Replace(":", "");
@@ -68,5 +72,6 @@ internal class RawFFIEntry
         Size = size;
         BitOffset = bitOffset;
         BitSize = bitSize;
+        Width = width;
     }
 }

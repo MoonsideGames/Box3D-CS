@@ -1753,15 +1753,19 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct INTERNAL_b3MeshNode_data_asNode
     {
-        public bitfield axis;
-        public bitfield childOffset;
+        public uint bitfield;
+
+        public readonly uint axis { get { return bitfield & 0b11u; } }
+        public readonly uint childOffset { get { return (bitfield >> 2) & 0b111111111111111111111111111111u; } }
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct INTERNAL_b3MeshNode_data_asLeaf
     {
-        public bitfield type;
-        public bitfield triangleCount;
+        public uint bitfield;
+
+        public readonly uint type { get { return bitfield & 0b11u; } }
+        public readonly uint triangleCount { get { return (bitfield >> 2) & 0b111111111111111111111111111111u; } }
     }
 
     [StructLayout(LayoutKind.Sequential)]

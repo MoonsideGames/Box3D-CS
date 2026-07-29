@@ -20,9 +20,14 @@ internal static partial class Program
         public List<(uint, string)> OffsetFields { get; } = new();
         public Dictionary<string, RawFFIEntry> InternalStructs { get; } = new();
 
+        public bool ContainsBitfield { get; set; }
+        public string BitfieldType { get; set; } = "";
+
         public void Reset()
         {
             ContainsUnion = false;
+            ContainsBitfield = false;
+            BitfieldType = "";
             OffsetFields.Clear();
             InternalStructs.Clear();
         }
@@ -1076,6 +1081,7 @@ public static unsafe class box
         StructDefinition.Reset();
         ConstructStructFields(entry, typePrefix: $"{structName}_");
 
+        // FIXME: what if the union contains a bitfield...
         if (StructDefinition.ContainsUnion)
         {
             definitions.Append("[StructLayout(LayoutKind.Explicit)]\n");
@@ -1084,6 +1090,20 @@ public static unsafe class box
             foreach (var (offset, field) in StructDefinition.OffsetFields)
             {
                 definitions.Append($"[FieldOffset({offset})]\n");
+                definitions.Append($"{field}\n");
+            }
+
+            definitions.Append("}\n\n");
+        }
+        else if (StructDefinition.ContainsBitfield)
+        {
+            definitions.Append("[StructLayout(LayoutKind.Sequential)]\n");
+            definitions.Append($"public struct {structName}\n{{\n");
+
+            definitions.Append($"public {StructDefinition.BitfieldType} bitfield;\n\n");
+
+            foreach (var (offset, field) in StructDefinition.OffsetFields)
+            {
                 definitions.Append($"{field}\n");
             }
 
@@ -1113,6 +1133,18 @@ public static unsafe class box
         if (entry.Tag == "union")
         {
             StructDefinition.ContainsUnion = true;
+        }
+
+        foreach (var field in entry.Fields!)
+        {
+            // FIXME: this assumes only one bitfield exists on the struct, might be multiple
+            var fieldTypedef = GetTypeFromTypedefMap(type: field.Type!);
+            if (fieldTypedef.Tag == "bitfield")
+            {
+                StructDefinition.ContainsBitfield = true;
+                StructDefinition.BitfieldType = CSharpTypeFromFFI(field.Type!.Type!, TypeContext.StructField);
+                break;
+            }
         }
 
         foreach (var field in entry.Fields!)
@@ -1150,6 +1182,30 @@ public static unsafe class box
                         $"public {type.Name} {fieldName};"
                     )
                 );
+            }
+            else if (fieldTypedef.Tag == "bitfield")
+            {
+                var bitfieldTypeName = CSharpTypeFromFFI(field.Type!.Type!, TypeContext.StructField);
+                var bitfieldWidth = fieldTypedef.Width!.Value;
+
+                if (field.BitOffset == 0)
+                {
+                    StructDefinition.OffsetFields.Add(
+                        (
+                            0, // no offset because it's a property
+                            $"public readonly {bitfieldTypeName} {fieldName} {{ get {{ return bitfield & 0b{ new string('1', (int) bitfieldWidth)  }u; }} }}"
+                        )
+                    );
+                }
+                else
+                {
+                    StructDefinition.OffsetFields.Add(
+                        (
+                            0, // no offset because it's a property
+                            $"public readonly {bitfieldTypeName} {fieldName} {{ get {{ return (bitfield >> {field.BitOffset}) & 0b{ new string('1', (int) bitfieldWidth) }u; }} }}"
+                        )
+                    );
+                }
             }
             else if (fieldTypeName == "INLINE_ARRAY")
             {

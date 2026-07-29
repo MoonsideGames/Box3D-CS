@@ -90,7 +90,7 @@ internal static partial class Program
 
         var projectName = CoreMode ? "box3d.Core.csproj" : "box3d.Legacy.csproj";
 
-        var bindingsDir = new FileInfo(Path.Combine(AppContext.BaseDirectory, "../../../../box3d/"));
+        var bindingsDir = new FileInfo(Path.Combine(AppContext.BaseDirectory, "../../../../Bindings/"));
         var bindingsProjectFile = new FileInfo(Path.Combine(bindingsDir.FullName, projectName));
         var ffiJsonFile = new FileInfo(Path.Combine(AppContext.BaseDirectory, "ffi.json"));
 

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices.Marshalling;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace box3d;
+namespace Box3D;
 
 public static unsafe partial class Interop
 {
@@ -2244,83 +2244,83 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DynamicTree_Destroy(IntPtr tree); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3DynamicTree_Destroy(b3DynamicTree* tree);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3DynamicTree_CreateProxy(IntPtr tree, b3AABB aabb, ulong categoryBits, ulong userData); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial int b3DynamicTree_CreateProxy(b3DynamicTree* tree, b3AABB aabb, ulong categoryBits, ulong userData);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DynamicTree_DestroyProxy(IntPtr tree, int proxyId); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3DynamicTree_DestroyProxy(b3DynamicTree* tree, int proxyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DynamicTree_MoveProxy(IntPtr tree, int proxyId, b3AABB aabb); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3DynamicTree_MoveProxy(b3DynamicTree* tree, int proxyId, b3AABB aabb);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DynamicTree_EnlargeProxy(IntPtr tree, int proxyId, b3AABB aabb); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3DynamicTree_EnlargeProxy(b3DynamicTree* tree, int proxyId, b3AABB aabb);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DynamicTree_SetCategoryBits(IntPtr tree, int proxyId, ulong categoryBits); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3DynamicTree_SetCategoryBits(b3DynamicTree* tree, int proxyId, ulong categoryBits);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial ulong b3DynamicTree_GetCategoryBits(IntPtr tree, int proxyId); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial ulong b3DynamicTree_GetCategoryBits(b3DynamicTree* tree, int proxyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3DynamicTree_Query(IntPtr tree, b3AABB aabb, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3DynamicTree_Query(b3DynamicTree* tree, b3AABB aabb, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3DynamicTree_QueryClosest(IntPtr tree, b3Vec3 point, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context, IntPtr minDistanceSqr); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3DynamicTree_QueryClosest(b3DynamicTree* tree, b3Vec3 point, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context, IntPtr minDistanceSqr); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3DynamicTree_RayCast(IntPtr tree, IntPtr input, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3DynamicTree_RayCast(b3DynamicTree* tree, IntPtr input, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3DynamicTree_BoxCast(IntPtr tree, IntPtr input, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3DynamicTree_BoxCast(b3DynamicTree* tree, IntPtr input, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3DynamicTree_GetHeight(IntPtr tree); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial int b3DynamicTree_GetHeight(b3DynamicTree* tree);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial float b3DynamicTree_GetAreaRatio(IntPtr tree); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial float b3DynamicTree_GetAreaRatio(b3DynamicTree* tree);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3AABB b3DynamicTree_GetRootBounds(IntPtr tree); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3AABB b3DynamicTree_GetRootBounds(b3DynamicTree* tree);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3DynamicTree_GetProxyCount(IntPtr tree); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial int b3DynamicTree_GetProxyCount(b3DynamicTree* tree);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3DynamicTree_Rebuild(IntPtr tree, box3dbool fullBuild); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial int b3DynamicTree_Rebuild(b3DynamicTree* tree, box3dbool fullBuild);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3DynamicTree_GetByteCount(IntPtr tree); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial int b3DynamicTree_GetByteCount(b3DynamicTree* tree);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DynamicTree_Validate(IntPtr tree); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3DynamicTree_Validate(b3DynamicTree* tree);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DynamicTree_ValidateNoEnlarged(IntPtr tree); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3DynamicTree_ValidateNoEnlarged(b3DynamicTree* tree);
 
     [LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DynamicTree_Save(IntPtr tree, string fileName); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3DynamicTree_Save(b3DynamicTree* tree, string fileName);
 
     [LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2328,11 +2328,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial ulong b3DynamicTree_GetUserData(IntPtr tree, int proxyId); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial ulong b3DynamicTree_GetUserData(b3DynamicTree* tree, int proxyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3AABB b3DynamicTree_GetAABB(IntPtr tree, int proxyId); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3AABB b3DynamicTree_GetAABB(b3DynamicTree* tree, int proxyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2364,23 +2364,23 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CreateCylinder(float height, float radius, float yOffset, int sides); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3HullData* b3CreateCylinder(float height, float radius, float yOffset, int sides);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CreateCone(float height, float radius1, float radius2, int slices); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3HullData* b3CreateCone(float height, float radius1, float radius2, int slices);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CreateRock(float radius); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3HullData* b3CreateRock(float radius);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CreateHull(IntPtr points, int pointCount, int maxVertexCount); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3HullData* b3CreateHull(in b3Vec3 points, int pointCount, int maxVertexCount);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CloneHull(IntPtr hull); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3HullData* b3CloneHull(in b3HullData hull);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2460,7 +2460,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CreateMesh(IntPtr def, IntPtr degenerateTriangleIndices, int degenerateCapacity); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3MeshData* b3CreateMesh(in b3MeshDef def, Span<int> degenerateTriangleIndices, int degenerateCapacity);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2738,7 +2738,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3WorldId b3CreateWorld(IntPtr def); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3WorldId b3CreateWorld(in b3WorldDef def);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2762,7 +2762,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_Draw(b3WorldId worldId, IntPtr draw, ulong maskBits); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3World_Draw(b3WorldId worldId, in b3DebugDraw draw, ulong maskBits);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3400,7 +3400,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3Body_GetShapes(b3BodyId bodyId, IntPtr shapeArray, int capacity); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial int b3Body_GetShapes(b3BodyId bodyId, b3ShapeId* shapeArray, int capacity);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3444,31 +3444,31 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3ShapeId b3CreateSphereShape(b3BodyId bodyId, IntPtr def, IntPtr sphere); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3ShapeId b3CreateSphereShape(b3BodyId bodyId, in b3ShapeDef def, in b3Sphere sphere);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3ShapeId b3CreateCapsuleShape(b3BodyId bodyId, IntPtr def, IntPtr capsule); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3ShapeId b3CreateCapsuleShape(b3BodyId bodyId, in b3ShapeDef def, in b3Capsule capsule);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3ShapeId b3CreateHullShape(b3BodyId bodyId, IntPtr def, IntPtr hull); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3ShapeId b3CreateHullShape(b3BodyId bodyId, in b3ShapeDef def, in b3HullData hull);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3ShapeId b3CreateTransformedHullShape(b3BodyId bodyId, IntPtr def, IntPtr hull, b3Transform transform, b3Vec3 scale); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3ShapeId b3CreateTransformedHullShape(b3BodyId bodyId, in b3ShapeDef def, in b3HullData hull, b3Transform transform, b3Vec3 scale);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3ShapeId b3CreateMeshShape(b3BodyId bodyId, IntPtr def, IntPtr mesh, b3Vec3 scale); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3ShapeId b3CreateMeshShape(b3BodyId bodyId, in b3ShapeDef def, b3MeshData* mesh, b3Vec3 scale);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3ShapeId b3CreateHeightFieldShape(b3BodyId bodyId, IntPtr def, IntPtr heightField); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3ShapeId b3CreateHeightFieldShape(b3BodyId bodyId, in b3ShapeDef def, in b3HeightFieldData heightField);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3ShapeId b3CreateBakedCompoundShape(b3BodyId bodyId, IntPtr def, IntPtr compound); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3ShapeId b3CreateBakedCompoundShape(b3BodyId bodyId, in b3ShapeDef def, in b3CompoundData compound);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

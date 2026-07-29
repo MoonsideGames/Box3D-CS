@@ -804,7 +804,7 @@ using System.Runtime.InteropServices.Marshalling;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace box3d;
+namespace Box3D;
 
 public static unsafe partial class Interop
 {
@@ -863,7 +863,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace box3d
+namespace Box3D
 {
 
 public static unsafe class box

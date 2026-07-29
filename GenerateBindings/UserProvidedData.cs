@@ -28,31 +28,31 @@ internal static class UserProvidedData
         { ("b3GetAxisAngle", "radians"), PointerFunctionDataIntent.Out }, // ../box3d/include/box3d/math_functions.h:535:18
         { ("b3MakeQuatFromMatrix", "m"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/math_functions.h:557:15
         { ("b3MakeAABB", "points"), PointerFunctionDataIntent.Array }, // ../box3d/include/box3d/math_functions.h:953:18
-        { ("b3DynamicTree_Destroy", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:22:13
-        { ("b3DynamicTree_CreateProxy", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:25:12
-        { ("b3DynamicTree_DestroyProxy", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:28:13
-        { ("b3DynamicTree_MoveProxy", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:31:13
-        { ("b3DynamicTree_EnlargeProxy", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:34:13
-        { ("b3DynamicTree_SetCategoryBits", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:37:13
-        { ("b3DynamicTree_GetCategoryBits", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:40:17
-        { ("b3DynamicTree_Query", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:44:20
-        { ("b3DynamicTree_QueryClosest", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:59:20
+        { ("b3DynamicTree_Destroy", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:22:13
+        { ("b3DynamicTree_CreateProxy", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:25:12
+        { ("b3DynamicTree_DestroyProxy", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:28:13
+        { ("b3DynamicTree_MoveProxy", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:31:13
+        { ("b3DynamicTree_EnlargeProxy", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:34:13
+        { ("b3DynamicTree_SetCategoryBits", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:37:13
+        { ("b3DynamicTree_GetCategoryBits", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:40:17
+        { ("b3DynamicTree_Query", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:44:20
+        { ("b3DynamicTree_QueryClosest", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:59:20
         { ("b3DynamicTree_QueryClosest", "minDistanceSqr"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:59:20
-        { ("b3DynamicTree_RayCast", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:76:20
+        { ("b3DynamicTree_RayCast", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:76:20
         { ("b3DynamicTree_RayCast", "input"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:76:20
-        { ("b3DynamicTree_BoxCast", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:82:20
+        { ("b3DynamicTree_BoxCast", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:82:20
         { ("b3DynamicTree_BoxCast", "input"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:82:20
-        { ("b3DynamicTree_GetHeight", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:86:12
-        { ("b3DynamicTree_GetAreaRatio", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:89:14
-        { ("b3DynamicTree_GetRootBounds", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:92:15
-        { ("b3DynamicTree_GetProxyCount", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:95:12
-        { ("b3DynamicTree_Rebuild", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:98:12
-        { ("b3DynamicTree_GetByteCount", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:101:12
-        { ("b3DynamicTree_Validate", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:104:13
-        { ("b3DynamicTree_ValidateNoEnlarged", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:107:13
-        { ("b3DynamicTree_Save", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:110:13
-        { ("b3DynamicTree_GetUserData", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:116:20
-        { ("b3DynamicTree_GetAABB", "tree"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:122:18
+        { ("b3DynamicTree_GetHeight", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:86:12
+        { ("b3DynamicTree_GetAreaRatio", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:89:14
+        { ("b3DynamicTree_GetRootBounds", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:92:15
+        { ("b3DynamicTree_GetProxyCount", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:95:12
+        { ("b3DynamicTree_Rebuild", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:98:12
+        { ("b3DynamicTree_GetByteCount", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:101:12
+        { ("b3DynamicTree_Validate", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:104:13
+        { ("b3DynamicTree_ValidateNoEnlarged", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:107:13
+        { ("b3DynamicTree_Save", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:110:13
+        { ("b3DynamicTree_GetUserData", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:116:20
+        { ("b3DynamicTree_GetAABB", "tree"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:122:18
         { ("b3GetHullVertices", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:135:31
         { ("b3GetHullVertices", "hull"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:135:31
         { ("b3GetHullPoints", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:146:25
@@ -67,13 +67,13 @@ internal static class UserProvidedData
         { ("b3GetHullSoaVertices", "hull"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:192:24
         { ("b3GetHullSoaNormals", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:205:24
         { ("b3GetHullSoaNormals", "hull"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:205:24
-        { ("b3CreateCylinder", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:216:20
-        { ("b3CreateCone", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:219:20
-        { ("b3CreateRock", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:222:20
-        { ("b3CreateHull", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:225:20
-        { ("b3CreateHull", "points"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:225:20
-        { ("b3CloneHull", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:228:20
-        { ("b3CloneHull", "hull"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:228:20
+        { ("b3CreateCylinder", "__return"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:216:20
+        { ("b3CreateCone", "__return"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:219:20
+        { ("b3CreateRock", "__return"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:222:20
+        { ("b3CreateHull", "__return"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:225:20
+        { ("b3CreateHull", "points"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/collision.h:225:20
+        { ("b3CloneHull", "__return"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:228:20
+        { ("b3CloneHull", "hull"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/collision.h:228:20
         { ("b3CloneAndTransformHull", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:231:20
         { ("b3CloneAndTransformHull", "original"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:231:20
         { ("b3DestroyHull", "hull"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:234:13
@@ -95,9 +95,9 @@ internal static class UserProvidedData
         { ("b3CreateBoxMesh", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:346:20
         { ("b3CreateHollowBoxMesh", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:349:20
         { ("b3CreatePlatformMesh", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:352:20
-        { ("b3CreateMesh", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:355:20
-        { ("b3CreateMesh", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:355:20
-        { ("b3CreateMesh", "degenerateTriangleIndices"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:355:20
+        { ("b3CreateMesh", "__return"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:355:20
+        { ("b3CreateMesh", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/collision.h:355:20
+        { ("b3CreateMesh", "degenerateTriangleIndices"), PointerFunctionDataIntent.OutArray }, // ../box3d/include/box3d/collision.h:355:20
         { ("b3DestroyMesh", "mesh"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:358:13
         { ("b3GetHeight", "mesh"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:361:12
         { ("b3GetHeightFieldCompressedHeights", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:371:27
@@ -215,8 +215,8 @@ internal static class UserProvidedData
         { ("b3CollideTriangleAndSphere", "sphereB"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:647:13
         { ("b3SolvePlanes", "planes"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:661:28
         { ("b3ClipVector", "planes"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:665:15
-        { ("b3CreateWorld", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:35:18
-        { ("b3World_Draw", "draw"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:56:13
+        { ("b3CreateWorld", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:35:18
+        { ("b3World_Draw", "draw"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:56:13
         { ("b3World_OverlapShape", "proxy"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:80:20
         { ("b3World_CastShape", "proxy"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:104:20
         { ("b3World_CastMover", "mover"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:118:14
@@ -225,7 +225,7 @@ internal static class UserProvidedData
         { ("b3Recording_GetData", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:270:23
         { ("b3RecPlayer_DrawFrameQueries", "draw"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:424:13
         { ("b3CreateBody", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:487:17
-        { ("b3Body_GetShapes", "shapeArray"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:743:12
+        { ("b3Body_GetShapes", "shapeArray"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/box3d.h:743:12
         { ("b3Body_GetJoints", "jointArray"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:750:12
         { ("b3Body_GetContactData", "contactData"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:756:12
         { ("b3Body_GetClosestPoint", "result"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:763:14
@@ -233,20 +233,20 @@ internal static class UserProvidedData
         { ("b3Body_OverlapShape", "proxy"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:775:13
         { ("b3Body_CollideMover", "bodyPlanes"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:779:12
         { ("b3Body_CollideMover", "mover"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:779:12
-        { ("b3CreateSphereShape", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:798:18
-        { ("b3CreateSphereShape", "sphere"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:798:18
-        { ("b3CreateCapsuleShape", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:803:18
-        { ("b3CreateCapsuleShape", "capsule"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:803:18
-        { ("b3CreateHullShape", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:808:18
-        { ("b3CreateHullShape", "hull"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:808:18
-        { ("b3CreateTransformedHullShape", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:814:18
-        { ("b3CreateTransformedHullShape", "hull"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:814:18
-        { ("b3CreateMeshShape", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:822:18
-        { ("b3CreateMeshShape", "mesh"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:822:18
-        { ("b3CreateHeightFieldShape", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:829:18
-        { ("b3CreateHeightFieldShape", "heightField"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:829:18
-        { ("b3CreateBakedCompoundShape", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:834:18
-        { ("b3CreateBakedCompoundShape", "compound"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:834:18
+        { ("b3CreateSphereShape", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:798:18
+        { ("b3CreateSphereShape", "sphere"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:798:18
+        { ("b3CreateCapsuleShape", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:803:18
+        { ("b3CreateCapsuleShape", "capsule"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:803:18
+        { ("b3CreateHullShape", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:808:18
+        { ("b3CreateHullShape", "hull"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:808:18
+        { ("b3CreateTransformedHullShape", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:814:18
+        { ("b3CreateTransformedHullShape", "hull"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:814:18
+        { ("b3CreateMeshShape", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:822:18
+        { ("b3CreateMeshShape", "mesh"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/box3d.h:822:18
+        { ("b3CreateHeightFieldShape", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:829:18
+        { ("b3CreateHeightFieldShape", "heightField"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:829:18
+        { ("b3CreateBakedCompoundShape", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:834:18
+        { ("b3CreateBakedCompoundShape", "compound"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:834:18
         { ("b3Shape_GetHull", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:954:26
         { ("b3Shape_GetHeightField", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:960:33
         { ("b3Shape_SetSphere", "sphere"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:965:13
@@ -272,24 +272,24 @@ internal static class UserProvidedData
 
     internal static readonly Dictionary<string, string> ReturnedArrayCountParamNames = new()
     {
-       
+
     };
 
     internal static readonly Dictionary<string, DelegateDefinition> DelegateDefinitions = new()
     {
-        
+
     };
 
     internal static readonly Dictionary<string, string[]> FlagEnumDefinitions = new()
     {
-        { 
+        {
             "b3TreeNodeFlags", [
                 "b3_allocatedNode = 0x0001",
                 "b3_enlargedNode = 0x0002",
                 "b3_leafNode = 0x0004",
-            ] 
+            ]
         }, // ../box3d/include/box3d/types.h:1681:3
-        { 
+        {
             "b3MeshEdgeFlags", [
                 "b3_concaveEdge1 = 0x01",
                 "b3_concaveEdge2 = 0x02",
@@ -307,7 +307,7 @@ internal static class UserProvidedData
 	            "b3_flatEdge3 = b3_concaveEdge3 | b3_inverseConcaveEdge3",
 
 	            "b3_allFlatEdges = b3_flatEdge1 | b3_flatEdge2 | b3_flatEdge3",
-            ] 
+            ]
         }, // ../box3d/include/box3d/types.h:2121:3
     };
 

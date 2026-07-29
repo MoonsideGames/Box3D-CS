@@ -1,3 +1,7 @@
 <Solution>
+  <Folder Name="/Bindings/">
+    <Project Path="Bindings/box3d.Core.csproj" />
+  </Folder>
+  <Project Path="Box3D/Box3D.csproj" />
   <Project Path="GenerateBindings/GenerateBindings.csproj" />
 </Solution>

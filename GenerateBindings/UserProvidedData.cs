@@ -313,7 +313,8 @@ internal static class UserProvidedData
 
     internal static readonly HashSet<string> FlagTypes =
     [
-       
+       "b3TreeNodeFlags",
+       "b3MeshEdgeFlags"
     ];
 
     internal static readonly string[] DeniedTypes = [];

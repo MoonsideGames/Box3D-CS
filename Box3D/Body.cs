@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace Box3D;
 
@@ -14,6 +16,11 @@ public readonly record struct BodyID(int Index, ushort World, ushort Generation)
             world0 = id.World,
             generation = id.Generation
         };
+    }
+
+    public static implicit operator BodyID(Interop.b3BodyId id)
+    {
+        return new BodyID(id.index1, id.world0, id.generation);
     }
 }
 
@@ -62,9 +69,70 @@ public struct Body : IEquatable<Body>
     // TODO: GetJoints
     // TODO: Destroy
 
-    public unsafe Shape CreateMeshShape(in ShapeDef def, TriangleMesh mesh, Vector3 scale)
+    public unsafe Shape CreateSphereShape(in ShapeDef shapeDef, in Sphere sphere)
     {
-        Interop.b3CreateMeshShape(ID, def, mesh.MeshData, Utility.ToBox3DVector(scale));
+        var nativeShapeDef = AllocNativeShapeDef(shapeDef);
+
+        var shapeID = Interop.b3CreateSphereShape(ID, nativeShapeDef, sphere);
+        var shape = new Shape(shapeID);
+
+        FreeNativeShapeDef(nativeShapeDef);
+
+        return shape;
+    }
+
+    public unsafe Shape CreateMeshShape(in ShapeDef shapeDef, TriangleMesh mesh, Vector3 scale)
+    {
+        var nativeShapeDef = AllocNativeShapeDef(shapeDef);
+
+        var shapeID = Interop.b3CreateMeshShape(ID, nativeShapeDef, mesh.MeshData, Utility.ToBox3DVector(scale));
+        var shape = new Shape(shapeID);
+
+        FreeNativeShapeDef(nativeShapeDef);
+
+        return shape;
+    }
+
+    private unsafe static Interop.b3ShapeDef AllocNativeShapeDef(in ShapeDef shapeDef)
+    {
+        var materials = (Interop.b3SurfaceMaterial*) NativeMemory.Alloc(
+			(nuint) (shapeDef.Materials.Length * Marshal.SizeOf<Interop.b3SurfaceMaterial>())
+		);
+
+        for (var i = 0; i < shapeDef.Materials.Length; i += 1)
+        {
+            materials[i] = shapeDef.Materials[i];
+        }
+
+        var unmanagedString = Utf8StringMarshaller.ConvertToUnmanaged(shapeDef.Name);
+
+        return new Interop.b3ShapeDef
+        {
+            name = unmanagedString,
+            userData = shapeDef.UserData,
+            materials = materials,
+            materialCount = shapeDef.Materials.Length,
+            baseMaterial = shapeDef.BaseMaterial,
+            density = shapeDef.Density,
+            explosionScale = shapeDef.ExplosionScale,
+            filter = shapeDef.Filter,
+            enableCustomFiltering = shapeDef.EnableCustomFiltering,
+            isSensor = shapeDef.IsSensor,
+            enableSensorEvents = shapeDef.EnableSensorEvents,
+            enableContactEvents = shapeDef.EnableContactEvents,
+            enableHitEvents = shapeDef.EnableHitEvents,
+            enablePreSolveEvents = shapeDef.EnablePreSolveEvents,
+            invokeContactCreation = shapeDef.InvokeContactCreation,
+            updateBodyMass = shapeDef.UpdateBodyMass,
+            enableSpeculativeContact = shapeDef.EnableSpeculativeContact,
+            internalValue = shapeDef.InternalValue
+        };
+    }
+
+    private unsafe static void FreeNativeShapeDef(in Interop.b3ShapeDef nativeShapeDef)
+    {
+        NativeMemory.Free(nativeShapeDef.materials);
+        Utf8StringMarshaller.Free(nativeShapeDef.name);
     }
 
     public readonly override bool Equals(object obj) => obj is Body other && Equals(other);

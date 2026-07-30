@@ -3,11 +3,13 @@ using System.Numerics;
 
 namespace Box3D;
 
-// Owns triangle mesh data.
 // If a shape references this, the mesh must outlive it.
 public unsafe class TriangleMesh
 {
-    public Interop.b3MeshData* MeshData;
+    // TODO: is it weird for this to be a pointer?
+    // Box3D allocs the memory but it feels odd in C# semantics
+    // to have to access the data through a pointer.
+    public Interop.b3MeshData* MeshData { get; }
 
     public static TriangleMesh Create(
         ReadOnlySpan<Vector3> vertices,

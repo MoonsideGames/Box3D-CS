@@ -23,29 +23,29 @@ public static unsafe partial class Interop
 
     // Taken from https://github.com/ppy/SDL3-CS
     // C# bools are not blittable, so we need this workaround
-    public readonly record struct box3dbool
+    public readonly record struct NativeBool
     {
         private readonly byte value;
 
         internal const byte FALSE_VALUE = 0;
         internal const byte TRUE_VALUE = 1;
 
-        internal box3dbool(byte value)
+        internal NativeBool(byte value)
         {
             this.value = value;
         }
 
-        public static implicit operator bool(box3dbool b)
+        public static implicit operator bool(NativeBool b)
         {
             return b.value != FALSE_VALUE;
         }
 
-        public static implicit operator box3dbool(bool b)
+        public static implicit operator NativeBool(bool b)
         {
-            return new box3dbool(b ? TRUE_VALUE : FALSE_VALUE);
+            return new NativeBool(b ? TRUE_VALUE : FALSE_VALUE);
         }
 
-        public bool Equals(box3dbool other)
+        public bool Equals(NativeBool other)
         {
             return other.value == value;
         }
@@ -94,7 +94,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsDoublePrecision();
+    public static partial NativeBool b3IsDoublePrecision();
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -282,7 +282,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsNormalized(b3Vec3 a);
+    public static partial NativeBool b3IsNormalized(b3Vec3 a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -334,7 +334,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsNormalizedQuat(b3Quat q);
+    public static partial NativeBool b3IsNormalizedQuat(b3Quat q);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -538,7 +538,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3AABB_Contains(b3AABB a, b3AABB b);
+    public static partial NativeBool b3AABB_Contains(b3AABB a, b3AABB b);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -562,7 +562,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3AABB_Overlaps(b3AABB a, b3AABB b);
+    public static partial NativeBool b3AABB_Overlaps(b3AABB a, b3AABB b);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -595,47 +595,47 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsValidFloat(float a);
+    public static partial NativeBool b3IsValidFloat(float a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsValidVec3(b3Vec3 a);
+    public static partial NativeBool b3IsValidVec3(b3Vec3 a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsValidQuat(b3Quat q);
+    public static partial NativeBool b3IsValidQuat(b3Quat q);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsValidTransform(b3Transform a);
+    public static partial NativeBool b3IsValidTransform(b3Transform a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsValidMatrix3(b3Matrix3 a);
+    public static partial NativeBool b3IsValidMatrix3(b3Matrix3 a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsValidAABB(b3AABB a);
+    public static partial NativeBool b3IsValidAABB(b3AABB a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsBoundedAABB(b3AABB a);
+    public static partial NativeBool b3IsBoundedAABB(b3AABB a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsSaneAABB(b3AABB a);
+    public static partial NativeBool b3IsSaneAABB(b3AABB a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsValidPlane(b3Plane a);
+    public static partial NativeBool b3IsValidPlane(b3Plane a);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsValidPosition(b3Vec3 p);
+    public static partial NativeBool b3IsValidPosition(b3Vec3 p);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsValidWorldTransform(b3Transform t);
+    public static partial NativeBool b3IsValidWorldTransform(b3Transform t);
 
     // ../box3d/include/box3d/constants.h
 
@@ -761,8 +761,8 @@ public static unsafe partial class Interop
         public float maximumLinearSpeed;
         public IntPtr frictionCallback; // WARN_ANONYMOUS_FUNCTION_POINTER
         public IntPtr restitutionCallback; // WARN_ANONYMOUS_FUNCTION_POINTER
-        public box3dbool enableSleep;
-        public box3dbool enableContinuous;
+        public NativeBool enableSleep;
+        public NativeBool enableContinuous;
         public uint workerCount;
         public IntPtr enqueueTask; // WARN_ANONYMOUS_FUNCTION_POINTER
         public IntPtr finishTask; // WARN_ANONYMOUS_FUNCTION_POINTER
@@ -790,12 +790,12 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3MotionLocks
     {
-        public box3dbool linearX;
-        public box3dbool linearY;
-        public box3dbool linearZ;
-        public box3dbool angularX;
-        public box3dbool angularY;
-        public box3dbool angularZ;
+        public NativeBool linearX;
+        public NativeBool linearY;
+        public NativeBool linearZ;
+        public NativeBool angularX;
+        public NativeBool angularY;
+        public NativeBool angularZ;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -813,12 +813,12 @@ public static unsafe partial class Interop
         public byte* name;
         public IntPtr userData;
         public b3MotionLocks motionLocks;
-        public box3dbool enableSleep;
-        public box3dbool isAwake;
-        public box3dbool isBullet;
-        public box3dbool isEnabled;
-        public box3dbool allowFastRotation;
-        public box3dbool enableContactRecycling;
+        public NativeBool enableSleep;
+        public NativeBool isAwake;
+        public NativeBool isBullet;
+        public NativeBool isEnabled;
+        public NativeBool allowFastRotation;
+        public NativeBool enableContactRecycling;
         public int internalValue;
     }
 
@@ -876,15 +876,15 @@ public static unsafe partial class Interop
         public float density;
         public float explosionScale;
         public b3Filter filter;
-        public box3dbool enableCustomFiltering;
-        public box3dbool isSensor;
-        public box3dbool enableSensorEvents;
-        public box3dbool enableContactEvents;
-        public box3dbool enableHitEvents;
-        public box3dbool enablePreSolveEvents;
-        public box3dbool invokeContactCreation;
-        public box3dbool updateBodyMass;
-        public box3dbool enableSpeculativeContact;
+        public NativeBool enableCustomFiltering;
+        public NativeBool isSensor;
+        public NativeBool enableSensorEvents;
+        public NativeBool enableContactEvents;
+        public NativeBool enableHitEvents;
+        public NativeBool enablePreSolveEvents;
+        public NativeBool invokeContactCreation;
+        public NativeBool updateBodyMass;
+        public NativeBool enableSpeculativeContact;
         public int internalValue;
     }
 
@@ -971,7 +971,7 @@ public static unsafe partial class Interop
         public float constraintHertz;
         public float constraintDampingRatio;
         public float drawScale;
-        public box3dbool collideConnected;
+        public NativeBool collideConnected;
         public int internalValue;
     }
 
@@ -980,15 +980,15 @@ public static unsafe partial class Interop
     {
         public b3JointDef @base;
         public float length;
-        public box3dbool enableSpring;
+        public NativeBool enableSpring;
         public float lowerSpringForce;
         public float upperSpringForce;
         public float hertz;
         public float dampingRatio;
-        public box3dbool enableLimit;
+        public NativeBool enableLimit;
         public float minLength;
         public float maxLength;
-        public box3dbool enableMotor;
+        public NativeBool enableMotor;
         public float maxMotorForce;
         public float motorSpeed;
     }
@@ -1044,14 +1044,14 @@ public static unsafe partial class Interop
     public struct b3PrismaticJointDef
     {
         public b3JointDef @base;
-        public box3dbool enableSpring;
+        public NativeBool enableSpring;
         public float hertz;
         public float dampingRatio;
         public float targetTranslation;
-        public box3dbool enableLimit;
+        public NativeBool enableLimit;
         public float lowerTranslation;
         public float upperTranslation;
-        public box3dbool enableMotor;
+        public NativeBool enableMotor;
         public float maxMotorForce;
         public float motorSpeed;
     }
@@ -1065,13 +1065,13 @@ public static unsafe partial class Interop
     {
         public b3JointDef @base;
         public float targetAngle;
-        public box3dbool enableSpring;
+        public NativeBool enableSpring;
         public float hertz;
         public float dampingRatio;
-        public box3dbool enableLimit;
+        public NativeBool enableLimit;
         public float lowerAngle;
         public float upperAngle;
-        public box3dbool enableMotor;
+        public NativeBool enableMotor;
         public float maxMotorTorque;
         public float motorSpeed;
     }
@@ -1084,16 +1084,16 @@ public static unsafe partial class Interop
     public struct b3SphericalJointDef
     {
         public b3JointDef @base;
-        public box3dbool enableSpring;
+        public NativeBool enableSpring;
         public float hertz;
         public float dampingRatio;
         public b3Quat targetRotation;
-        public box3dbool enableConeLimit;
+        public NativeBool enableConeLimit;
         public float coneAngle;
-        public box3dbool enableTwistLimit;
+        public NativeBool enableTwistLimit;
         public float lowerTwistAngle;
         public float upperTwistAngle;
-        public box3dbool enableMotor;
+        public NativeBool enableMotor;
         public float maxMotorTorque;
         public b3Vec3 motorVelocity;
     }
@@ -1120,21 +1120,21 @@ public static unsafe partial class Interop
     public struct b3WheelJointDef
     {
         public b3JointDef @base;
-        public box3dbool enableSuspensionSpring;
+        public NativeBool enableSuspensionSpring;
         public float suspensionHertz;
         public float suspensionDampingRatio;
-        public box3dbool enableSuspensionLimit;
+        public NativeBool enableSuspensionLimit;
         public float lowerSuspensionLimit;
         public float upperSuspensionLimit;
-        public box3dbool enableSpinMotor;
+        public NativeBool enableSpinMotor;
         public float maxSpinTorque;
         public float spinSpeed;
-        public box3dbool enableSteering;
+        public NativeBool enableSteering;
         public float steeringHertz;
         public float steeringDampingRatio;
         public float targetSteeringAngle;
         public float maxSteeringTorque;
-        public box3dbool enableSteeringLimit;
+        public NativeBool enableSteeringLimit;
         public float lowerSteeringLimit;
         public float upperSteeringLimit;
     }
@@ -1226,7 +1226,7 @@ public static unsafe partial class Interop
         public IntPtr userData;
         public b3Transform transform;
         public b3BodyId bodyId;
-        public box3dbool fellAsleep;
+        public NativeBool fellAsleep;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1293,7 +1293,7 @@ public static unsafe partial class Interop
         public int childIndex;
         public int nodeVisits;
         public int leafVisits;
-        public box3dbool hit;
+        public NativeBool hit;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1310,7 +1310,7 @@ public static unsafe partial class Interop
         public b3ShapeProxy proxy;
         public b3Vec3 translation;
         public float maxFraction;
-        public box3dbool canEncroach;
+        public NativeBool canEncroach;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1331,7 +1331,7 @@ public static unsafe partial class Interop
         public int triangleIndex;
         public int childIndex;
         public int materialIndex;
-        public box3dbool hit;
+        public NativeBool hit;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1344,7 +1344,7 @@ public static unsafe partial class Interop
         public int triangleIndex;
         public ulong userMaterialId;
         public int iterations;
-        public box3dbool hit;
+        public NativeBool hit;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1364,7 +1364,7 @@ public static unsafe partial class Interop
         public b3Transform transform;
         public b3Vec3 translationB;
         public float maxFraction;
-        public box3dbool canEncroach;
+        public NativeBool canEncroach;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1373,7 +1373,7 @@ public static unsafe partial class Interop
         public b3ShapeProxy proxyA;
         public b3ShapeProxy proxyB;
         public b3Transform transform;
-        public box3dbool useRadii;
+        public NativeBool useRadii;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1448,7 +1448,7 @@ public static unsafe partial class Interop
         public int distanceIterations;
         public int pushBackIterations;
         public int rootIterations;
-        public box3dbool usedFallback;
+        public NativeBool usedFallback;
     }
 
     [Flags]
@@ -1524,7 +1524,7 @@ public static unsafe partial class Interop
         public b3Plane plane;
         public float pushLimit;
         public float push;
-        public box3dbool clipVelocity;
+        public NativeBool clipVelocity;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1684,9 +1684,9 @@ public static unsafe partial class Interop
         public float weldTolerance;
         public int vertexCount;
         public int triangleCount;
-        public box3dbool weldVertices;
-        public box3dbool useMedianSplit;
-        public box3dbool identifyEdges;
+        public NativeBool weldVertices;
+        public NativeBool useMedianSplit;
+        public NativeBool identifyEdges;
     }
 
     [Flags]
@@ -1784,7 +1784,7 @@ public static unsafe partial class Interop
         public int countZ;
         public float globalMinimumHeight;
         public float globalMaximumHeight;
-        public box3dbool clockwiseWinding;
+        public NativeBool clockwiseWinding;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1803,7 +1803,7 @@ public static unsafe partial class Interop
         public int heightsOffset;
         public int materialOffset;
         public int flagsOffset;
-        public box3dbool clockwise;
+        public NativeBool clockwise;
         public fixed byte padding[3];
     }
 
@@ -1935,7 +1935,7 @@ public static unsafe partial class Interop
         public float normalVelocity;
         public uint featureId;
         public int triangleIndex;
-        public box3dbool persisted;
+        public NativeBool persisted;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -2215,20 +2215,20 @@ public static unsafe partial class Interop
         public b3AABB drawingBounds;
         public float forceScale;
         public float jointScale;
-        public box3dbool drawShapes;
-        public box3dbool drawJoints;
-        public box3dbool drawJointExtras;
-        public box3dbool drawBounds;
-        public box3dbool drawMass;
-        public box3dbool drawSleep;
-        public box3dbool drawBodyNames;
-        public box3dbool drawContacts;
-        public box3dbool drawAnchorA;
-        public box3dbool drawGraphColors;
-        public box3dbool drawContactFeatures;
-        public box3dbool drawContactNormals;
-        public box3dbool drawContactForces;
-        public box3dbool drawIslands;
+        public NativeBool drawShapes;
+        public NativeBool drawJoints;
+        public NativeBool drawJointExtras;
+        public NativeBool drawBounds;
+        public NativeBool drawMass;
+        public NativeBool drawSleep;
+        public NativeBool drawBodyNames;
+        public NativeBool drawContacts;
+        public NativeBool drawAnchorA;
+        public NativeBool drawGraphColors;
+        public NativeBool drawContactFeatures;
+        public NativeBool drawContactNormals;
+        public NativeBool drawContactForces;
+        public NativeBool drawIslands;
         public IntPtr context;
     }
 
@@ -2272,19 +2272,19 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3DynamicTree_Query(b3DynamicTree* tree, b3AABB aabb, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context);
+    public static partial b3TreeStats b3DynamicTree_Query(b3DynamicTree* tree, b3AABB aabb, ulong maskBits, NativeBool requireAllBits, IntPtr callback, IntPtr context);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3DynamicTree_QueryClosest(b3DynamicTree* tree, b3Vec3 point, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context, IntPtr minDistanceSqr); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3DynamicTree_QueryClosest(b3DynamicTree* tree, b3Vec3 point, ulong maskBits, NativeBool requireAllBits, IntPtr callback, IntPtr context, IntPtr minDistanceSqr); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3DynamicTree_RayCast(b3DynamicTree* tree, IntPtr input, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3DynamicTree_RayCast(b3DynamicTree* tree, IntPtr input, ulong maskBits, NativeBool requireAllBits, IntPtr callback, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3DynamicTree_BoxCast(b3DynamicTree* tree, IntPtr input, ulong maskBits, box3dbool requireAllBits, IntPtr callback, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3DynamicTree_BoxCast(b3DynamicTree* tree, IntPtr input, ulong maskBits, NativeBool requireAllBits, IntPtr callback, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2304,7 +2304,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int b3DynamicTree_Rebuild(b3DynamicTree* tree, box3dbool fullBuild);
+    public static partial int b3DynamicTree_Rebuild(b3DynamicTree* tree, NativeBool fullBuild);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2436,7 +2436,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CreateGridMesh(int xCount, int zCount, float cellWidth, int materialCount, box3dbool identifyEdges); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial IntPtr b3CreateGridMesh(int xCount, int zCount, float cellWidth, int materialCount, NativeBool identifyEdges); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2448,7 +2448,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CreateBoxMesh(b3Vec3 center, b3Vec3 extent, box3dbool identifyEdges); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial IntPtr b3CreateBoxMesh(b3Vec3 center, b3Vec3 extent, NativeBool identifyEdges); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2488,11 +2488,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CreateGrid(int rowCount, int columnCount, b3Vec3 scale, box3dbool makeHoles); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial IntPtr b3CreateGrid(int rowCount, int columnCount, b3Vec3 scale, NativeBool makeHoles); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3CreateWave(int rowCount, int columnCount, b3Vec3 scale, float rowFrequency, float columnFrequency, box3dbool makeHoles); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial IntPtr b3CreateWave(int rowCount, int columnCount, b3Vec3 scale, float rowFrequency, float columnFrequency, NativeBool makeHoles); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2588,31 +2588,31 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3IsValidRay(IntPtr input); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial NativeBool b3IsValidRay(IntPtr input); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3OverlapCapsule(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial NativeBool b3OverlapCapsule(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3OverlapCompound(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial NativeBool b3OverlapCompound(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3OverlapHeightField(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial NativeBool b3OverlapHeightField(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3OverlapHull(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial NativeBool b3OverlapHull(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3OverlapMesh(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial NativeBool b3OverlapMesh(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3OverlapSphere(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial NativeBool b3OverlapSphere(IntPtr shape, b3Transform shapeTransform, IntPtr proxy); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2720,7 +2720,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3CollideTriangleAndHull(IntPtr manifold, int capacity, b3Vec3 v1, b3Vec3 v2, b3Vec3 v3, int triangleFlags, IntPtr hullB, IntPtr cache, box3dbool enableSpeculative); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3CollideTriangleAndHull(IntPtr manifold, int capacity, b3Vec3 v1, b3Vec3 v2, b3Vec3 v3, int triangleFlags, IntPtr hullB, IntPtr cache, NativeBool enableSpeculative); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2754,7 +2754,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3World_IsValid(b3WorldId id);
+    public static partial NativeBool b3World_IsValid(b3WorldId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2814,19 +2814,19 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_EnableSleeping(b3WorldId worldId, box3dbool flag);
+    public static partial void b3World_EnableSleeping(b3WorldId worldId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3World_IsSleepingEnabled(b3WorldId worldId);
+    public static partial NativeBool b3World_IsSleepingEnabled(b3WorldId worldId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_EnableContinuous(b3WorldId worldId, box3dbool flag);
+    public static partial void b3World_EnableContinuous(b3WorldId worldId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3World_IsContinuousEnabled(b3WorldId worldId);
+    public static partial NativeBool b3World_IsContinuousEnabled(b3WorldId worldId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2886,11 +2886,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_EnableWarmStarting(b3WorldId worldId, box3dbool flag);
+    public static partial void b3World_EnableWarmStarting(b3WorldId worldId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3World_IsWarmStartingEnabled(b3WorldId worldId);
+    public static partial NativeBool b3World_IsWarmStartingEnabled(b3WorldId worldId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2946,7 +2946,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_EnableSpeculative(b3WorldId worldId, box3dbool flag);
+    public static partial void b3World_EnableSpeculative(b3WorldId worldId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2974,7 +2974,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3SaveRecordingToFile(IntPtr recording, string path);
+    public static partial NativeBool b3SaveRecordingToFile(IntPtr recording, string path);
 
     [LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -2982,7 +2982,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3ValidateReplay(IntPtr data, int size, int workerCount);
+    public static partial NativeBool b3ValidateReplay(IntPtr data, int size, int workerCount);
 
     [StructLayout(LayoutKind.Sequential)]
     public struct b3RecPlayerInfo
@@ -3005,7 +3005,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3RecPlayer_StepFrame(IntPtr player);
+    public static partial NativeBool b3RecPlayer_StepFrame(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3033,15 +3033,15 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3RecPlayer_IsAtEnd(IntPtr player);
+    public static partial NativeBool b3RecPlayer_IsAtEnd(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3RecPlayer_IsAtPreStep(IntPtr player);
+    public static partial NativeBool b3RecPlayer_IsAtPreStep(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3RecPlayer_HasDiverged(IntPtr player);
+    public static partial NativeBool b3RecPlayer_HasDiverged(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3139,7 +3139,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3BodyId b3CreateBody(b3WorldId worldId, IntPtr def); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3BodyId b3CreateBody(b3WorldId worldId, in b3BodyDef def);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3147,7 +3147,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Body_IsValid(b3BodyId id);
+    public static partial NativeBool b3Body_IsValid(b3BodyId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3224,7 +3224,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_SetTargetTransform(b3BodyId bodyId, b3Transform target, float timeStep, box3dbool wake);
+    public static partial void b3Body_SetTargetTransform(b3BodyId bodyId, b3Transform target, float timeStep, NativeBool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3236,27 +3236,27 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyForce(b3BodyId bodyId, b3Vec3 force, b3Vec3 point, box3dbool wake);
+    public static partial void b3Body_ApplyForce(b3BodyId bodyId, b3Vec3 force, b3Vec3 point, NativeBool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyForceToCenter(b3BodyId bodyId, b3Vec3 force, box3dbool wake);
+    public static partial void b3Body_ApplyForceToCenter(b3BodyId bodyId, b3Vec3 force, NativeBool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyTorque(b3BodyId bodyId, b3Vec3 torque, box3dbool wake);
+    public static partial void b3Body_ApplyTorque(b3BodyId bodyId, b3Vec3 torque, NativeBool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyLinearImpulse(b3BodyId bodyId, b3Vec3 impulse, b3Vec3 point, box3dbool wake);
+    public static partial void b3Body_ApplyLinearImpulse(b3BodyId bodyId, b3Vec3 impulse, b3Vec3 point, NativeBool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyLinearImpulseToCenter(b3BodyId bodyId, b3Vec3 impulse, box3dbool wake);
+    public static partial void b3Body_ApplyLinearImpulseToCenter(b3BodyId bodyId, b3Vec3 impulse, NativeBool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_ApplyAngularImpulse(b3BodyId bodyId, b3Vec3 impulse, box3dbool wake);
+    public static partial void b3Body_ApplyAngularImpulse(b3BodyId bodyId, b3Vec3 impulse, NativeBool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3320,19 +3320,19 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Body_IsAwake(b3BodyId bodyId);
+    public static partial NativeBool b3Body_IsAwake(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_SetAwake(b3BodyId bodyId, box3dbool awake);
+    public static partial void b3Body_SetAwake(b3BodyId bodyId, NativeBool awake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_EnableSleep(b3BodyId bodyId, box3dbool enableSleep);
+    public static partial void b3Body_EnableSleep(b3BodyId bodyId, NativeBool enableSleep);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Body_IsSleepEnabled(b3BodyId bodyId);
+    public static partial NativeBool b3Body_IsSleepEnabled(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3344,7 +3344,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Body_IsEnabled(b3BodyId bodyId);
+    public static partial NativeBool b3Body_IsEnabled(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3364,31 +3364,31 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_SetBullet(b3BodyId bodyId, box3dbool flag);
+    public static partial void b3Body_SetBullet(b3BodyId bodyId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Body_IsBullet(b3BodyId bodyId);
+    public static partial NativeBool b3Body_IsBullet(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_AllowFastRotation(b3BodyId bodyId, box3dbool flag);
+    public static partial void b3Body_AllowFastRotation(b3BodyId bodyId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Body_IsFastRotationAllowed(b3BodyId bodyId);
+    public static partial NativeBool b3Body_IsFastRotationAllowed(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_EnableContactRecycling(b3BodyId bodyId, box3dbool flag);
+    public static partial void b3Body_EnableContactRecycling(b3BodyId bodyId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Body_IsContactRecyclingEnabled(b3BodyId bodyId);
+    public static partial NativeBool b3Body_IsContactRecyclingEnabled(b3BodyId bodyId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Body_EnableHitEvents(b3BodyId bodyId, box3dbool flag);
+    public static partial void b3Body_EnableHitEvents(b3BodyId bodyId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3432,11 +3432,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3BodyCastResult b3Body_CastShape(b3BodyId bodyId, b3Vec3 origin, IntPtr proxy, b3Vec3 translation, b3QueryFilter filter, float maxFraction, box3dbool canEncroach, b3Transform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3BodyCastResult b3Body_CastShape(b3BodyId bodyId, b3Vec3 origin, IntPtr proxy, b3Vec3 translation, b3QueryFilter filter, float maxFraction, NativeBool canEncroach, b3Transform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Body_OverlapShape(b3BodyId bodyId, b3Vec3 origin, IntPtr proxy, b3QueryFilter filter, b3Transform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial NativeBool b3Body_OverlapShape(b3BodyId bodyId, b3Vec3 origin, IntPtr proxy, b3QueryFilter filter, b3Transform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3472,11 +3472,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DestroyShape(b3ShapeId shapeId, box3dbool updateBodyMass);
+    public static partial void b3DestroyShape(b3ShapeId shapeId, NativeBool updateBodyMass);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Shape_IsValid(b3ShapeId id);
+    public static partial NativeBool b3Shape_IsValid(b3ShapeId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3492,7 +3492,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Shape_IsSensor(b3ShapeId shapeId);
+    public static partial NativeBool b3Shape_IsSensor(b3ShapeId shapeId);
 
     [LibraryImport(nativeLibName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3513,7 +3513,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_SetDensity(b3ShapeId shapeId, float density, box3dbool updateBodyMass);
+    public static partial void b3Shape_SetDensity(b3ShapeId shapeId, float density, NativeBool updateBodyMass);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3561,39 +3561,39 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_SetFilter(b3ShapeId shapeId, b3Filter filter, box3dbool invokeContacts);
+    public static partial void b3Shape_SetFilter(b3ShapeId shapeId, b3Filter filter, NativeBool invokeContacts);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_EnableSensorEvents(b3ShapeId shapeId, box3dbool flag);
+    public static partial void b3Shape_EnableSensorEvents(b3ShapeId shapeId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Shape_AreSensorEventsEnabled(b3ShapeId shapeId);
+    public static partial NativeBool b3Shape_AreSensorEventsEnabled(b3ShapeId shapeId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_EnableContactEvents(b3ShapeId shapeId, box3dbool flag);
+    public static partial void b3Shape_EnableContactEvents(b3ShapeId shapeId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Shape_AreContactEventsEnabled(b3ShapeId shapeId);
+    public static partial NativeBool b3Shape_AreContactEventsEnabled(b3ShapeId shapeId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_EnablePreSolveEvents(b3ShapeId shapeId, box3dbool flag);
+    public static partial void b3Shape_EnablePreSolveEvents(b3ShapeId shapeId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Shape_ArePreSolveEventsEnabled(b3ShapeId shapeId);
+    public static partial NativeBool b3Shape_ArePreSolveEventsEnabled(b3ShapeId shapeId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_EnableHitEvents(b3ShapeId shapeId, box3dbool flag);
+    public static partial void b3Shape_EnableHitEvents(b3ShapeId shapeId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Shape_AreHitEventsEnabled(b3ShapeId shapeId);
+    public static partial NativeBool b3Shape_AreHitEventsEnabled(b3ShapeId shapeId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3665,15 +3665,15 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Shape_ApplyWind(b3ShapeId shapeId, b3Vec3 wind, float drag, float lift, float maxSpeed, box3dbool wake);
+    public static partial void b3Shape_ApplyWind(b3ShapeId shapeId, b3Vec3 wind, float drag, float lift, float maxSpeed, NativeBool wake);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DestroyJoint(b3JointId jointId, box3dbool wakeAttached);
+    public static partial void b3DestroyJoint(b3JointId jointId, NativeBool wakeAttached);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Joint_IsValid(b3JointId id);
+    public static partial NativeBool b3Joint_IsValid(b3JointId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3709,11 +3709,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3Joint_SetCollideConnected(b3JointId jointId, box3dbool shouldCollide);
+    public static partial void b3Joint_SetCollideConnected(b3JointId jointId, NativeBool shouldCollide);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Joint_GetCollideConnected(b3JointId jointId);
+    public static partial NativeBool b3Joint_GetCollideConnected(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3809,11 +3809,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DistanceJoint_EnableSpring(b3JointId jointId, box3dbool enableSpring);
+    public static partial void b3DistanceJoint_EnableSpring(b3JointId jointId, NativeBool enableSpring);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3DistanceJoint_IsSpringEnabled(b3JointId jointId);
+    public static partial NativeBool b3DistanceJoint_IsSpringEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3841,11 +3841,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DistanceJoint_EnableLimit(b3JointId jointId, box3dbool enableLimit);
+    public static partial void b3DistanceJoint_EnableLimit(b3JointId jointId, NativeBool enableLimit);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3DistanceJoint_IsLimitEnabled(b3JointId jointId);
+    public static partial NativeBool b3DistanceJoint_IsLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3865,11 +3865,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3DistanceJoint_EnableMotor(b3JointId jointId, box3dbool enableMotor);
+    public static partial void b3DistanceJoint_EnableMotor(b3JointId jointId, NativeBool enableMotor);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3DistanceJoint_IsMotorEnabled(b3JointId jointId);
+    public static partial NativeBool b3DistanceJoint_IsMotorEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3985,11 +3985,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3PrismaticJoint_EnableSpring(b3JointId jointId, box3dbool enableSpring);
+    public static partial void b3PrismaticJoint_EnableSpring(b3JointId jointId, NativeBool enableSpring);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3PrismaticJoint_IsSpringEnabled(b3JointId jointId);
+    public static partial NativeBool b3PrismaticJoint_IsSpringEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4017,11 +4017,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3PrismaticJoint_EnableLimit(b3JointId jointId, box3dbool enableLimit);
+    public static partial void b3PrismaticJoint_EnableLimit(b3JointId jointId, NativeBool enableLimit);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3PrismaticJoint_IsLimitEnabled(b3JointId jointId);
+    public static partial NativeBool b3PrismaticJoint_IsLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4037,11 +4037,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3PrismaticJoint_EnableMotor(b3JointId jointId, box3dbool enableMotor);
+    public static partial void b3PrismaticJoint_EnableMotor(b3JointId jointId, NativeBool enableMotor);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3PrismaticJoint_IsMotorEnabled(b3JointId jointId);
+    public static partial NativeBool b3PrismaticJoint_IsMotorEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4077,11 +4077,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RevoluteJoint_EnableSpring(b3JointId jointId, box3dbool enableSpring);
+    public static partial void b3RevoluteJoint_EnableSpring(b3JointId jointId, NativeBool enableSpring);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3RevoluteJoint_IsSpringEnabled(b3JointId jointId);
+    public static partial NativeBool b3RevoluteJoint_IsSpringEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4113,11 +4113,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RevoluteJoint_EnableLimit(b3JointId jointId, box3dbool enableLimit);
+    public static partial void b3RevoluteJoint_EnableLimit(b3JointId jointId, NativeBool enableLimit);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3RevoluteJoint_IsLimitEnabled(b3JointId jointId);
+    public static partial NativeBool b3RevoluteJoint_IsLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4133,11 +4133,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RevoluteJoint_EnableMotor(b3JointId jointId, box3dbool enableMotor);
+    public static partial void b3RevoluteJoint_EnableMotor(b3JointId jointId, NativeBool enableMotor);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3RevoluteJoint_IsMotorEnabled(b3JointId jointId);
+    public static partial NativeBool b3RevoluteJoint_IsMotorEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4165,11 +4165,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3SphericalJoint_EnableConeLimit(b3JointId jointId, box3dbool enableLimit);
+    public static partial void b3SphericalJoint_EnableConeLimit(b3JointId jointId, NativeBool enableLimit);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3SphericalJoint_IsConeLimitEnabled(b3JointId jointId);
+    public static partial NativeBool b3SphericalJoint_IsConeLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4185,11 +4185,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3SphericalJoint_EnableTwistLimit(b3JointId jointId, box3dbool enableLimit);
+    public static partial void b3SphericalJoint_EnableTwistLimit(b3JointId jointId, NativeBool enableLimit);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3SphericalJoint_IsTwistLimitEnabled(b3JointId jointId);
+    public static partial NativeBool b3SphericalJoint_IsTwistLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4209,11 +4209,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3SphericalJoint_EnableSpring(b3JointId jointId, box3dbool enableSpring);
+    public static partial void b3SphericalJoint_EnableSpring(b3JointId jointId, NativeBool enableSpring);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3SphericalJoint_IsSpringEnabled(b3JointId jointId);
+    public static partial NativeBool b3SphericalJoint_IsSpringEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4241,11 +4241,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3SphericalJoint_EnableMotor(b3JointId jointId, box3dbool enableMotor);
+    public static partial void b3SphericalJoint_EnableMotor(b3JointId jointId, NativeBool enableMotor);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3SphericalJoint_IsMotorEnabled(b3JointId jointId);
+    public static partial NativeBool b3SphericalJoint_IsMotorEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4309,11 +4309,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3WheelJoint_EnableSuspension(b3JointId jointId, box3dbool flag);
+    public static partial void b3WheelJoint_EnableSuspension(b3JointId jointId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3WheelJoint_IsSuspensionEnabled(b3JointId jointId);
+    public static partial NativeBool b3WheelJoint_IsSuspensionEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4333,11 +4333,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3WheelJoint_EnableSuspensionLimit(b3JointId jointId, box3dbool flag);
+    public static partial void b3WheelJoint_EnableSuspensionLimit(b3JointId jointId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3WheelJoint_IsSuspensionLimitEnabled(b3JointId jointId);
+    public static partial NativeBool b3WheelJoint_IsSuspensionLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4353,11 +4353,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3WheelJoint_EnableSpinMotor(b3JointId jointId, box3dbool flag);
+    public static partial void b3WheelJoint_EnableSpinMotor(b3JointId jointId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3WheelJoint_IsSpinMotorEnabled(b3JointId jointId);
+    public static partial NativeBool b3WheelJoint_IsSpinMotorEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4385,11 +4385,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3WheelJoint_EnableSteering(b3JointId jointId, box3dbool flag);
+    public static partial void b3WheelJoint_EnableSteering(b3JointId jointId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3WheelJoint_IsSteeringEnabled(b3JointId jointId);
+    public static partial NativeBool b3WheelJoint_IsSteeringEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4417,11 +4417,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3WheelJoint_EnableSteeringLimit(b3JointId jointId, box3dbool flag);
+    public static partial void b3WheelJoint_EnableSteeringLimit(b3JointId jointId, NativeBool flag);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3WheelJoint_IsSteeringLimitEnabled(b3JointId jointId);
+    public static partial NativeBool b3WheelJoint_IsSteeringLimitEnabled(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -4453,7 +4453,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial box3dbool b3Contact_IsValid(b3ContactId id);
+    public static partial NativeBool b3Contact_IsValid(b3ContactId id);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

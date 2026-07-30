@@ -822,29 +822,29 @@ public static unsafe partial class Interop
 
     // Taken from https://github.com/ppy/SDL3-CS
     // C# bools are not blittable, so we need this workaround
-    public readonly record struct box3dbool
+    public readonly record struct NativeBool
     {
         private readonly byte value;
 
         internal const byte FALSE_VALUE = 0;
         internal const byte TRUE_VALUE = 1;
 
-        internal box3dbool(byte value)
+        internal NativeBool(byte value)
         {
             this.value = value;
         }
 
-        public static implicit operator bool(box3dbool b)
+        public static implicit operator bool(NativeBool b)
         {
             return b.value != FALSE_VALUE;
         }
 
-        public static implicit operator box3dbool(bool b)
+        public static implicit operator NativeBool(bool b)
         {
-            return new box3dbool(b ? TRUE_VALUE : FALSE_VALUE);
+            return new NativeBool(b ? TRUE_VALUE : FALSE_VALUE);
         }
 
-        public bool Equals(box3dbool other)
+        public bool Equals(NativeBool other)
         {
             return other.value == value;
         }
@@ -915,29 +915,29 @@ public static unsafe class box
 
     // Taken from https://github.com/ppy/SDL3-CS
     // C# bools are not blittable, so we need this workaround
-    public struct box3dbool
+    public struct NativeBool
     {
         private readonly byte value;
 
         internal const byte FALSE_VALUE = 0;
         internal const byte TRUE_VALUE = 1;
 
-        internal box3dbool(byte value)
+        internal NativeBool(byte value)
         {
             this.value = value;
         }
 
-        public static implicit operator bool(box3dbool b)
+        public static implicit operator bool(NativeBool b)
         {
             return b.value != FALSE_VALUE;
         }
 
-        public static implicit operator box3dbool(bool b)
+        public static implicit operator NativeBool(bool b)
         {
-            return new box3dbool(b ? TRUE_VALUE : FALSE_VALUE);
+            return new NativeBool(b ? TRUE_VALUE : FALSE_VALUE);
         }
 
-        public bool Equals(box3dbool other)
+        public bool Equals(NativeBool other)
         {
             return other.value == value;
         }
@@ -946,11 +946,11 @@ public static unsafe class box
         {
             if (rhs is bool)
             {
-                return Equals((box3dbool)(bool)rhs);
+                return Equals((NativeBool)(bool)rhs);
             }
-            else if (rhs is box3dbool)
+            else if (rhs is NativeBool)
             {
-                return Equals((box3dbool)rhs);
+                return Equals((NativeBool)rhs);
             }
             else
             {
@@ -1021,7 +1021,7 @@ public static unsafe class box
 
         return type.Tag switch
         {
-            "_Bool"            => "box3dbool",
+            "_Bool"            => "NativeBool",
             "uint8_t"          => "byte",
             "Sint8"            => "sbyte",
             "int16_t"          => "short",

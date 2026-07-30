@@ -20,6 +20,20 @@ public static class Utility
         return new Vector3(vec3.x, vec3.y, vec3.z);
     }
 
+    public static Interop.b3Quat ToBox3DQuaternion(Quaternion q)
+    {
+        return new Interop.b3Quat
+        {
+            v = new Interop.b3Vec3
+            {
+                x = q.X,
+                y = q.Y,
+                z = q.Z
+            },
+            s = q.W
+        };
+    }
+
     public static Quaternion ToQuaternion(Interop.b3Quat quat)
     {
         return new Quaternion(ToVector3(quat.v), quat.s);

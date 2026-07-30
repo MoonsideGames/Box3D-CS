@@ -224,7 +224,7 @@ internal static class UserProvidedData
         { ("b3World_Explode", "explosionDef"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:176:13
         { ("b3Recording_GetData", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:270:23
         { ("b3RecPlayer_DrawFrameQueries", "draw"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:424:13
-        { ("b3CreateBody", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:487:17
+        { ("b3CreateBody", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:487:17
         { ("b3Body_GetShapes", "shapeArray"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/box3d.h:743:12
         { ("b3Body_GetJoints", "jointArray"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:750:12
         { ("b3Body_GetContactData", "contactData"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:756:12

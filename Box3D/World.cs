@@ -12,21 +12,29 @@ public struct Capacity
     public int DynamicBodyCount;
     public int ContactCount;
 
-    internal Interop.b3Capacity ToBox3D()
+    public static implicit operator Interop.b3Capacity(Capacity capacity) => new()
     {
-        return new Interop.b3Capacity
-        {
-            staticShapeCount = StaticShapeCount,
-            dynamicShapeCount = DynamicShapeCount,
-            staticBodyCount = StaticBodyCount,
-            dynamicBodyCount = DynamicBodyCount,
-            contactCount = ContactCount
-        };
-    }
+        staticShapeCount = capacity.StaticShapeCount,
+        dynamicShapeCount = capacity.DynamicShapeCount,
+        staticBodyCount = capacity.StaticBodyCount,
+        dynamicBodyCount = capacity.DynamicBodyCount,
+        contactCount = capacity.ContactCount
+    };
+
+    public static implicit operator Capacity(Interop.b3Capacity capacity) => new()
+    {
+        StaticShapeCount = capacity.staticShapeCount,
+        DynamicShapeCount = capacity.dynamicShapeCount,
+        StaticBodyCount = capacity.staticBodyCount,
+        DynamicBodyCount = capacity.dynamicBodyCount,
+        ContactCount = capacity.contactCount
+    };
 }
 
 public struct WorldDef
 {
+    public const int SECRET_COOKIE = 1152023;
+
     public Vector3 Gravity;
     public float RestitutionThreshold;
     public float HitEventThreshold;
@@ -51,33 +59,57 @@ public struct WorldDef
     public Capacity Capacity;
     internal int InternalValue;
 
-    internal Interop.b3WorldDef ToBox3D()
+    public static WorldDef Default => Interop.b3DefaultWorldDef();
+
+    public static implicit operator Interop.b3WorldDef(WorldDef def) => new()
     {
-        return new Interop.b3WorldDef
-        {
-            gravity = Utility.ToBox3DVector(Gravity),
-            restitutionThreshold = RestitutionThreshold,
-            hitEventThreshold = HitEventThreshold,
-            contactHertz = ContactHertz,
-            contactDampingRatio = ContactDampingRatio,
-            contactSpeed = ContactSpeed,
-            maximumLinearSpeed = MaximumLinearSpeed,
-            frictionCallback = FrictionCallback,
-            restitutionCallback = RestitutionCallback,
-            enableSleep = EnableSleep,
-            enableContinuous = EnableContinuous,
-            workerCount = WorkerCount,
-            enqueueTask = EnqueueTask,
-            finishTask = FinishTask,
-            userTaskContext = UserTaskContext,
-            userData = UserData,
-            createDebugShape = CreateDebugShape,
-            destroyDebugShape = DestroyDebugShape,
-            userDebugShapeContext = UserDebugShapeContext,
-            capacity = Capacity.ToBox3D(),
-            internalValue = InternalValue
-        };
-    }
+        gravity = Utility.ToBox3DVector(def.Gravity),
+        restitutionThreshold = def.RestitutionThreshold,
+        hitEventThreshold = def.HitEventThreshold,
+        contactHertz = def.ContactHertz,
+        contactDampingRatio = def.ContactDampingRatio,
+        contactSpeed = def.ContactSpeed,
+        maximumLinearSpeed = def.MaximumLinearSpeed,
+        frictionCallback = def.FrictionCallback,
+        restitutionCallback = def.RestitutionCallback,
+        enableSleep = def.EnableSleep,
+        enableContinuous = def.EnableContinuous,
+        workerCount = def.WorkerCount,
+        enqueueTask = def.EnqueueTask,
+        finishTask = def.FinishTask,
+        userTaskContext = def.UserTaskContext,
+        userData = def.UserData,
+        createDebugShape = def.CreateDebugShape,
+        destroyDebugShape = def.DestroyDebugShape,
+        userDebugShapeContext = def.UserDebugShapeContext,
+        capacity = def.Capacity,
+        internalValue = def.InternalValue
+    };
+
+    public static implicit operator WorldDef(Interop.b3WorldDef def) => new()
+    {
+        Gravity = Utility.ToVector3(def.gravity),
+        RestitutionThreshold = def.restitutionThreshold,
+        HitEventThreshold = def.hitEventThreshold,
+        ContactHertz = def.contactHertz,
+        ContactDampingRatio = def.contactDampingRatio,
+        ContactSpeed = def.contactSpeed,
+        MaximumLinearSpeed = def.maximumLinearSpeed,
+        FrictionCallback = def.frictionCallback,
+        RestitutionCallback = def.restitutionCallback,
+        EnableSleep = def.enableSleep,
+        EnableContinuous = def.enableContinuous,
+        WorkerCount = def.workerCount,
+        EnqueueTask = def.enqueueTask,
+        FinishTask = def.finishTask,
+        UserTaskContext = def.userTaskContext,
+        UserData = def.userData,
+        CreateDebugShape = def.createDebugShape,
+        DestroyDebugShape = def.destroyDebugShape,
+        UserDebugShapeContext = def.userDebugShapeContext,
+        Capacity = def.capacity,
+        InternalValue = def.internalValue  
+    };
 }
 
 public class World
@@ -88,9 +120,7 @@ public class World
 
     public static World Create(WorldDef def)
     {
-        var interopDef = def.ToBox3D();
-        var handle = Interop.b3CreateWorld(interopDef);
-
+        var handle = Interop.b3CreateWorld(def);
         return new World(handle);
     }
 

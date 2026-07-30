@@ -23,6 +23,11 @@ public struct SurfaceMaterial
     public uint CustomColor;
     public uint Padding;
 
+    public static SurfaceMaterial Default => new()
+    {
+        Friction = 0.6f  
+    };
+
     public static implicit operator Interop.b3SurfaceMaterial(SurfaceMaterial material) => new()
     {
         friction = material.Friction,
@@ -39,6 +44,13 @@ public struct CollisionFilter
     public ulong CategoryBits;
     public ulong MaskBits;
     public int GroupIndex;
+
+    public static CollisionFilter Default => new()
+    {
+        CategoryBits = ulong.MaxValue,
+        MaskBits = ulong.MaxValue,
+        GroupIndex = 0
+    };
 
     public static implicit operator Interop.b3Filter(CollisionFilter filter) => new()
     {
@@ -70,6 +82,8 @@ public struct MotionLocks
 
 public struct BodyDef
 {
+    const int SECRET_COOKIE = 1152023;
+
     public BodyType Type;
     public Vector3 Position;
     public Quaternion Rotation;
@@ -89,10 +103,26 @@ public struct BodyDef
     public bool AllowFastRotation;
     public bool EnableContactRecycling;
     internal int InternalValue;
+
+    // Just reimplement this to avoid the string allocation weirdness
+    public static BodyDef Default => new BodyDef
+    {
+        Type = BodyType.Static,
+        Rotation = Quaternion.Identity,
+        SleepThreshold = 0.05f * Interop.b3GetLengthUnitsPerMeter(),
+        GravityScale = 1f,
+        EnableSleep = true,
+        IsAwake = true,
+        IsEnabled = true,
+        EnableContactRecycling = true,
+        InternalValue = SECRET_COOKIE
+    };
 }
 
 public struct ShapeDef
 {
+    const int SECRET_COOKIE = 1152023;
+
     public string Name;
     public IntPtr UserData;
     public SurfaceMaterial[] Materials;
@@ -110,13 +140,24 @@ public struct ShapeDef
     public bool UpdateBodyMass;
     public bool EnableSpeculativeContact;
     internal int InternalValue;
+
+    // Just reimplement this to avoid the string allocation weirdness
+    public static ShapeDef Default => new()
+    {
+        BaseMaterial = SurfaceMaterial.Default,
+        Materials = [],
+        Density = 1000f / (Interop.b3GetLengthUnitsPerMeter() * Interop.b3GetLengthUnitsPerMeter() * Interop.b3GetLengthUnitsPerMeter()),
+        ExplosionScale = 1f,
+        Filter = CollisionFilter.Default,
+        UpdateBodyMass = true,
+        InvokeContactCreation = true,
+        EnableSpeculativeContact = true,
+        InternalValue = SECRET_COOKIE
+    };
 }
 
-public struct Sphere
+public record struct Sphere(Vector3 Center, float Radius)
 {
-    public Vector3 Center;
-    public float Radius;
-
     public static implicit operator Interop.b3Sphere(Sphere sphere) => new()
     {
         center = Utility.ToBox3DVector(sphere.Center),

@@ -93,6 +93,19 @@ public struct Body : IEquatable<Body>
         return shape;
     }
 
+    // FIXME: don't expose interop hull data
+    public Shape CreateHullShape(in ShapeDef shapeDef, in Interop.b3HullData hullData)
+    {
+        var nativeShapeDef = AllocNativeShapeDef(shapeDef);
+
+        var shapeID = Interop.b3CreateHullShape(ID, nativeShapeDef, hullData);
+        var shape = new Shape(shapeID);
+
+        FreeNativeShapeDef(nativeShapeDef);
+
+        return shape;
+    }
+
     private unsafe static Interop.b3ShapeDef AllocNativeShapeDef(in ShapeDef shapeDef)
     {
         var materials = (Interop.b3SurfaceMaterial*) NativeMemory.Alloc(

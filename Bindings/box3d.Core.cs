@@ -3452,7 +3452,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3ShapeId b3CreateHullShape(b3BodyId bodyId, in b3ShapeDef def, in b3HullData hull);
+    public static partial b3ShapeId b3CreateHullShape(b3BodyId bodyId, in b3ShapeDef def, b3HullData* hull);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

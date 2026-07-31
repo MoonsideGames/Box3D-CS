@@ -238,7 +238,7 @@ internal static class UserProvidedData
         { ("b3CreateCapsuleShape", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:803:18
         { ("b3CreateCapsuleShape", "capsule"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:803:18
         { ("b3CreateHullShape", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:808:18
-        { ("b3CreateHullShape", "hull"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:808:18
+        { ("b3CreateHullShape", "hull"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/box3d.h:808:18
         { ("b3CreateTransformedHullShape", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:814:18
         { ("b3CreateTransformedHullShape", "hull"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:814:18
         { ("b3CreateMeshShape", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:822:18

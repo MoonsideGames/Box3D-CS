@@ -5,6 +5,8 @@ namespace Box3D;
 // TODO: if we require .NET 10, we can use extension operators for conversions.
 public static class Utility
 {
+    public const float QuakeUnitsToMetersConstant = 0.0265625f;
+
     public static Interop.b3Vec3 ToBox3DVector(Vector3 vector)
     {
         return new Interop.b3Vec3

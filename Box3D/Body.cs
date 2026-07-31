@@ -8,6 +8,8 @@ namespace Box3D;
 
 public readonly record struct BodyID(int Index, ushort World, ushort Generation)
 {
+    public readonly bool IsNull => Index == 0;
+
     public static implicit operator Interop.b3BodyId(BodyID id)
     {
         return new Interop.b3BodyId
@@ -26,7 +28,7 @@ public readonly record struct BodyID(int Index, ushort World, ushort Generation)
 
 public struct Body : IEquatable<Body>
 {
-    public BodyID ID { get; }
+    public BodyID ID { get; private set; }
 
     public readonly bool IsValid => Interop.b3Body_IsValid(ID);
     public readonly bool IsAwake => Interop.b3Body_IsAwake(ID);
@@ -57,6 +59,13 @@ public struct Body : IEquatable<Body>
     public readonly int JointCount => Interop.b3Body_GetJointCount(ID);
 
     internal Body(BodyID id) => ID = id;
+
+    public void Destroy()
+    {
+        if (ID.IsNull) { return; }
+        Interop.b3DestroyBody(ID);
+        ID = default; // FIXME: is mutability a problem here?
+    }
 
     public unsafe int GetShapes(Span<ShapeID> buffer)
     {
@@ -93,13 +102,18 @@ public struct Body : IEquatable<Body>
         return shape;
     }
 
-    // FIXME: do we need a generic Hull implementation?
-    public unsafe Shape CreateHullShape(in ShapeDef shapeDef, BoxHull hull)
+    // passing BoxHull via reference to avoid expensive copy
+    public unsafe Shape CreateHullShape(in ShapeDef shapeDef, in BoxHull hull)
     {
         var nativeShapeDef = AllocNativeShapeDef(shapeDef);
 
-        // this is a weird API that accesses the whole data via pointer to the sub-struct... don't understand why, but ok.
-        var shapeID = Interop.b3CreateHullShape(ID, nativeShapeDef, &hull.Hull.@base);
+        ShapeID shapeID;
+        fixed (Interop.b3BoxHull* h = &hull.Hull)
+        {
+            // this API accesses the whole data via pointer to the sub-struct
+            shapeID = Interop.b3CreateHullShape(ID, nativeShapeDef, &h->@base);
+        }
+    
         var shape = new Shape(shapeID);
 
         FreeNativeShapeDef(nativeShapeDef);

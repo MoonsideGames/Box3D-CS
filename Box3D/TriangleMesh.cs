@@ -9,7 +9,7 @@ public unsafe class TriangleMesh
     // TODO: is it weird for this to be a pointer?
     // Box3D allocs the memory but it feels odd in C# semantics
     // to have to access the data through a pointer.
-    public Interop.b3MeshData* MeshData { get; }
+    internal Interop.b3MeshData* MeshData { get; private set; }
 
     public static TriangleMesh Create(
         ReadOnlySpan<Vector3> vertices,
@@ -40,5 +40,17 @@ public unsafe class TriangleMesh
     internal TriangleMesh(Interop.b3MeshData* meshData)
     {
         MeshData = meshData;
+    }
+
+    public void Destroy()
+    {
+        if (MeshData == null)
+        {
+            return;
+        }
+
+        Interop.b3DestroyMesh((IntPtr) MeshData);
+
+        MeshData = null;
     }
 }

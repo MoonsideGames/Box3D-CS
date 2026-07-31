@@ -3,10 +3,8 @@ namespace Box3D;
 // TODO: lifecycle?
 public struct BoxHull
 {
+    // TODO: how to not expose this?
     internal Interop.b3BoxHull Hull;
-
-    // TODO: don't expose interop data
-    public readonly Interop.b3HullData Data => Hull.@base;
 
     public static BoxHull CreateBox(float hx, float hy, float hz)
     {

@@ -93,12 +93,13 @@ public struct Body : IEquatable<Body>
         return shape;
     }
 
-    // FIXME: don't expose interop hull data
-    public Shape CreateHullShape(in ShapeDef shapeDef, in Interop.b3HullData hullData)
+    // FIXME: do we need a generic Hull implementation?
+    public unsafe Shape CreateHullShape(in ShapeDef shapeDef, BoxHull hull)
     {
         var nativeShapeDef = AllocNativeShapeDef(shapeDef);
 
-        var shapeID = Interop.b3CreateHullShape(ID, nativeShapeDef, hullData);
+        // this is a weird API that accesses the whole data via pointer to the sub-struct... don't understand why, but ok.
+        var shapeID = Interop.b3CreateHullShape(ID, nativeShapeDef, &hull.Hull.@base);
         var shape = new Shape(shapeID);
 
         FreeNativeShapeDef(nativeShapeDef);

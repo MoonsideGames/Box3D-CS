@@ -19,7 +19,6 @@ internal static partial class Program
         public bool ContainsUnion { get; set; }
         public List<(uint, string)> OffsetFields { get; } = new();
         public Dictionary<string, RawFFIEntry> InternalStructs { get; } = new();
-        public List<string> DelegateDefinitions { get; } = new();
 
         public bool ContainsBitfield { get; set; }
         public string BitfieldType { get; set; } = "";
@@ -31,7 +30,6 @@ internal static partial class Program
             BitfieldType = "";
             OffsetFields.Clear();
             InternalStructs.Clear();
-            DelegateDefinitions.Clear();
         }
     }
 
@@ -1093,11 +1091,6 @@ public static unsafe class box
             definitions.Append("[StructLayout(LayoutKind.Explicit)]\n");
             definitions.Append($"public struct {structName}\n{{\n");
 
-            foreach (var delegateDefinition in StructDefinition.DelegateDefinitions)
-            {
-                definitions.Append(delegateDefinition);
-            }
-
             foreach (var (offset, field) in StructDefinition.OffsetFields)
             {
                 definitions.Append($"[FieldOffset({offset})]\n");
@@ -1110,11 +1103,6 @@ public static unsafe class box
         {
             definitions.Append("[StructLayout(LayoutKind.Sequential)]\n");
             definitions.Append($"public struct {structName}\n{{\n");
-
-            foreach (var delegateDefinition in StructDefinition.DelegateDefinitions)
-            {
-                definitions.Append(delegateDefinition);
-            }
 
             definitions.Append($"public {StructDefinition.BitfieldType} bitfield;\n\n");
 
@@ -1129,11 +1117,6 @@ public static unsafe class box
         {
             definitions.Append("[StructLayout(LayoutKind.Sequential)]\n");
             definitions.Append($"public struct {structName}\n{{\n");
-
-            foreach (var delegateDefinition in StructDefinition.DelegateDefinitions)
-            {
-                definitions.Append(delegateDefinition);
-            }
 
             foreach (var (offset, field) in StructDefinition.OffsetFields)
             {
@@ -1263,13 +1246,11 @@ public static unsafe class box
                     {
                         UnusedUserProvidedTypes.Remove(fieldName);
 
-                        StructDefinition.DelegateDefinitions.Add(EmitDelegate(fieldName + "Delegate", delegateDefinition));
-
                         context = field.Name;
                         StructDefinition.OffsetFields.Add(
                             (
                                 byteOffset + (uint) field.BitOffset! / 8,
-                                $"public {fieldName + "Delegate"} {fieldName};"
+                                $"{EmitFunctionPointerSignature(delegateDefinition)} public IntPtr {fieldName};\n"
                             )
                         );
                     }
@@ -1307,6 +1288,30 @@ public static unsafe class box
                 );
             }
         }
+    }
+
+    private static string EmitFunctionPointerSignature(UserProvidedData.DelegateDefinition definition)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append("// ");
+        stringBuilder.Append(definition.ReturnType);
+        stringBuilder.Append(" (*)(");
+        var initialParam = true;
+        foreach (var (paramType, paramName) in definition.Parameters)
+        {
+            if (initialParam == false)
+            {
+                stringBuilder.Append(", ");
+            }
+            else
+            {
+                initialParam = false;
+            }
+
+            stringBuilder.Append($"{paramType}");
+        }
+        stringBuilder.Append(")\n");
+        return stringBuilder.ToString();
     }
 
     private static string EmitDelegate(string name, UserProvidedData.DelegateDefinition definition)

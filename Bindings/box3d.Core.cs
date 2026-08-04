@@ -2203,15 +2203,42 @@ public static unsafe partial class Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct b3DebugDraw
     {
-        public IntPtr DrawShapeFcn; // WARN_ANONYMOUS_FUNCTION_POINTER
-        public IntPtr DrawSegmentFcn; // WARN_ANONYMOUS_FUNCTION_POINTER
-        public IntPtr DrawTransformFcn; // WARN_ANONYMOUS_FUNCTION_POINTER
-        public IntPtr DrawPointFcn; // WARN_ANONYMOUS_FUNCTION_POINTER
-        public IntPtr DrawSphereFcn; // WARN_ANONYMOUS_FUNCTION_POINTER
-        public IntPtr DrawCapsuleFcn; // WARN_ANONYMOUS_FUNCTION_POINTER
-        public IntPtr DrawBoundsFcn; // WARN_ANONYMOUS_FUNCTION_POINTER
-        public IntPtr DrawBoxFcn; // WARN_ANONYMOUS_FUNCTION_POINTER
-        public IntPtr DrawStringFcn; // WARN_ANONYMOUS_FUNCTION_POINTER
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void DrawShapeFcnDelegate(IntPtr userShape, b3Transform transform, b3HexColor color, IntPtr context);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void DrawSegmentFcnDelegate(b3Vec3 p1, b3Vec3 p2, b3HexColor color, IntPtr context);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void DrawTransformFcnDelegate(b3Transform transform, IntPtr context);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void DrawPointFcnDelegate(b3Vec3 p, float size, b3HexColor color, IntPtr context);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void DrawSphereFcnDelegate(b3Vec3 p, float radius, b3HexColor color, float alpha, IntPtr context);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void DrawCapsuleFcnDelegate(b3Vec3 p1, b3Vec3 p2, float radius, b3HexColor color, float alpha, IntPtr context);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void DrawBoundsFcnDelegate(b3AABB aabb, b3HexColor color, IntPtr context);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void DrawBoxFcnDelegate(b3Vec3 extents, b3Transform transform, b3HexColor color, IntPtr context);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void DrawStringFcnDelegate(b3Vec3 p, byte* s, b3HexColor color, IntPtr context);
+
+        public DrawShapeFcnDelegate DrawShapeFcn;
+        public DrawSegmentFcnDelegate DrawSegmentFcn;
+        public DrawTransformFcnDelegate DrawTransformFcn;
+        public DrawPointFcnDelegate DrawPointFcn;
+        public DrawSphereFcnDelegate DrawSphereFcn;
+        public DrawCapsuleFcnDelegate DrawCapsuleFcn;
+        public DrawBoundsFcnDelegate DrawBoundsFcn;
+        public DrawBoxFcnDelegate DrawBoxFcn;
+        public DrawStringFcnDelegate DrawStringFcn;
         public b3AABB drawingBounds;
         public float forceScale;
         public float jointScale;

@@ -275,9 +275,127 @@ internal static class UserProvidedData
 
     };
 
+    // FIXME: In double-precision mode, these types won't be correct
+    // FIXME: these are anonymous function pointers. what if multiple structs define field functions with the same name?
     internal static readonly Dictionary<string, DelegateDefinition> DelegateDefinitions = new()
     {
-
+        {
+            "DrawShapeFcn", 
+            new DelegateDefinition
+            {
+                   ReturnType = "void",
+                   Parameters = [
+                       ("IntPtr", "userShape"),
+                       ("b3Transform", "transform"), 
+                       ("b3HexColor", "color"),
+                       ("IntPtr", "context")
+                   ]
+            }
+        },
+        {
+            "DrawSegmentFcn",
+            new DelegateDefinition
+            {
+                ReturnType = "void",
+                Parameters = [
+                    ("b3Vec3", "p1"),
+                    ("b3Vec3", "p2"),
+                    ("b3HexColor", "color"),
+                    ("IntPtr", "context")
+                ]
+            }
+        },
+        {
+            "DrawTransformFcn",
+            new DelegateDefinition
+            {
+                ReturnType = "void",
+                Parameters = [
+                    ("b3Transform", "transform"),
+                    ("IntPtr", "context")
+                ]
+            }
+        },
+        {
+            "DrawPointFcn",
+            new DelegateDefinition
+            {
+                ReturnType = "void",
+                Parameters = [
+                    ("b3Vec3", "p"),
+                    ("float", "size"),
+                    ("b3HexColor", "color"),
+                    ("IntPtr", "context")
+                ]
+            }
+        },
+        {
+            "DrawSphereFcn",
+            new DelegateDefinition
+            {
+                ReturnType = "void",
+                Parameters = [
+                    ("b3Vec3", "p"),
+                    ("float", "radius"),
+                    ("b3HexColor", "color"),
+                    ("float", "alpha"),
+                    ("IntPtr", "context")
+                ]
+            }
+        },
+        {
+            "DrawCapsuleFcn",
+            new DelegateDefinition
+            {
+                ReturnType = "void",
+                Parameters = [
+                    ("b3Vec3", "p1"),
+                    ("b3Vec3", "p2"),
+                    ("float", "radius"),
+                    ("b3HexColor", "color"),
+                    ("float", "alpha"),
+                    ("IntPtr", "context")
+                ]
+            }
+        },
+        {
+            "DrawBoundsFcn",
+            new DelegateDefinition
+            {
+                ReturnType = "void",
+                Parameters = [
+                    ("b3AABB", "aabb"),
+                    ("b3HexColor", "color"),
+                    ("IntPtr", "context")
+                ]
+            }
+        },
+        {
+            "DrawBoxFcn",
+            new DelegateDefinition
+            {
+                ReturnType = "void",
+                Parameters = [
+                    ("b3Vec3", "extents"),
+                    ("b3Transform", "transform"),
+                    ("b3HexColor", "color"),
+                    ("IntPtr", "context")
+                ]
+            }
+        },
+        {
+            "DrawStringFcn",
+            new DelegateDefinition
+            {
+                ReturnType = "void",
+                Parameters = [
+                    ("b3Vec3", "p"),
+                    ("byte*", "s"),
+                    ("b3HexColor", "color"),
+                    ("IntPtr", "context")
+                ]
+            }
+        }
     };
 
     internal static readonly Dictionary<string, string[]> FlagEnumDefinitions = new()

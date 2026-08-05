@@ -114,7 +114,7 @@ public struct WorldDef
 
 public class World
 {
-    internal Interop.b3WorldId ID { get; init; }
+    public Interop.b3WorldId ID { get; private init; }
 
     public bool IsValid => Interop.b3World_IsValid(ID);
 

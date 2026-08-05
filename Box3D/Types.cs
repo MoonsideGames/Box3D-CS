@@ -1,10 +1,17 @@
 using System;
 using System.Numerics;
-using System.Runtime.InteropServices;
 
 namespace Box3D;
 
-public readonly record struct Transform(Vector3 Position, Quaternion Quaternion);
+public readonly record struct Transform(Vector3 Position, Quaternion Quaternion)
+{
+    public Matrix4x4 ToMatrix4x4()
+    {
+        return
+            Matrix4x4.CreateFromQuaternion(Quaternion) *
+            Matrix4x4.CreateTranslation(Position);
+    }
+}
 
 public enum BodyType
 {

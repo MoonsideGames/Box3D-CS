@@ -81,10 +81,10 @@ internal static class UserProvidedData
         { ("b3ScaleBox", "transform"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:266:13
         { ("b3GetMeshNodes", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:276:29
         { ("b3GetMeshNodes", "mesh"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:276:29
-        { ("b3GetMeshVertices", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:287:25
-        { ("b3GetMeshVertices", "mesh"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:287:25
-        { ("b3GetMeshTriangles", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:298:33
-        { ("b3GetMeshTriangles", "mesh"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:298:33
+        { ("b3GetMeshVertices", "__return"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:287:25
+        { ("b3GetMeshVertices", "mesh"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:287:25
+        { ("b3GetMeshTriangles", "__return"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:298:33
+        { ("b3GetMeshTriangles", "mesh"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:298:33
         { ("b3GetMeshMaterialIndices", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:309:26
         { ("b3GetMeshMaterialIndices", "mesh"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:309:26
         { ("b3GetMeshFlags", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:320:26
@@ -280,13 +280,13 @@ internal static class UserProvidedData
     internal static readonly Dictionary<string, DelegateDefinition> DelegateDefinitions = new()
     {
         {
-            "DrawShapeFcn", 
+            "DrawShapeFcn",
             new DelegateDefinition
             {
                    ReturnType = "void",
                    Parameters = [
                        ("IntPtr", "userShape"),
-                       ("b3Transform", "transform"), 
+                       ("b3Transform", "transform"),
                        ("b3HexColor", "color"),
                        ("IntPtr", "context")
                    ]
@@ -435,5 +435,12 @@ internal static class UserProvidedData
        "b3MeshEdgeFlags"
     ];
 
-    internal static readonly string[] DeniedTypes = [];
+    internal static readonly string[] DeniedTypes = [
+        // These are declared as B3_INLINE, not in the public API
+        "b3GetMeshNodes",
+        "b3GetMeshVertices",
+        "b3GetMeshTriangles",
+        "b3GetMeshMaterialIndices",
+        "b3GetMeshFlags"
+    ];
 }

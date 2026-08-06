@@ -2434,26 +2434,6 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3GetMeshNodes(IntPtr mesh); // WARN_UNKNOWN_POINTER_PARAMETER
-
-    [LibraryImport(nativeLibName)]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3GetMeshVertices(IntPtr mesh); // WARN_UNKNOWN_POINTER_PARAMETER
-
-    [LibraryImport(nativeLibName)]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3GetMeshTriangles(IntPtr mesh); // WARN_UNKNOWN_POINTER_PARAMETER
-
-    [LibraryImport(nativeLibName)]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3GetMeshMaterialIndices(IntPtr mesh); // WARN_UNKNOWN_POINTER_PARAMETER
-
-    [LibraryImport(nativeLibName)]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3GetMeshFlags(IntPtr mesh); // WARN_UNKNOWN_POINTER_PARAMETER
-
-    [LibraryImport(nativeLibName)]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial IntPtr b3CreateGridMesh(int xCount, int zCount, float cellWidth, int materialCount, NativeBool identifyEdges); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]

@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace Box3D;
 
@@ -32,7 +33,7 @@ public struct SurfaceMaterial
 
     public static SurfaceMaterial Default => new()
     {
-        Friction = 0.6f  
+        Friction = 0.6f
     };
 
     public static implicit operator Interop.b3SurfaceMaterial(SurfaceMaterial material) => new()
@@ -64,6 +65,31 @@ public struct CollisionFilter
         categoryBits = filter.CategoryBits,
         maskBits = filter.MaskBits,
         groupIndex = filter.GroupIndex
+    };
+}
+
+public record struct QueryFilter(
+    ulong CategoryBits,
+    ulong MaskBits,
+    ulong ID,
+    IntPtr Name) // byte* string
+{
+    public static QueryFilter Default => Interop.b3DefaultQueryFilter();
+
+    public unsafe static implicit operator Interop.b3QueryFilter(QueryFilter filter) => new()
+    {
+        categoryBits = filter.CategoryBits,
+        maskBits = filter.MaskBits,
+        id = filter.ID,
+        name = (byte*)filter.Name
+    };
+
+    public unsafe static implicit operator QueryFilter(Interop.b3QueryFilter filter) => new()
+    {
+        CategoryBits = filter.categoryBits,
+        MaskBits = filter.maskBits,
+        ID = filter.id,
+        Name = (IntPtr)filter.name
     };
 }
 
@@ -169,5 +195,49 @@ public record struct Sphere(Vector3 Center, float Radius)
     {
         center = Utility.ToBox3DVector(sphere.Center),
         radius = sphere.Radius
+    };
+}
+
+public record struct Capsule(Vector3 Center1, Vector3 Center2, float Radius)
+{
+    public static implicit operator Interop.b3Capsule(Capsule capsule) => new()
+    {
+        center1 = Utility.ToBox3DVector(capsule.Center1),
+        center2 = Utility.ToBox3DVector(capsule.Center2),
+        radius = capsule.Radius
+    };
+}
+
+public record struct PlaneResult(
+    Plane Plane,
+    Vector3 Point)
+{
+    public static implicit operator Interop.b3PlaneResult(PlaneResult result) =>
+        Unsafe.BitCast<PlaneResult, Interop.b3PlaneResult>(result);
+}
+
+public record struct CollisionPlane(
+    Plane Plane,
+    float PushLimit,
+    float Push,
+    bool ClipVelocity)
+{
+    public static implicit operator Interop.b3CollisionPlane(CollisionPlane plane) => new()
+    {
+        plane = Utility.ToBox3DPlane(plane.Plane),
+        pushLimit = plane.PushLimit,
+        push = plane.Push,
+        clipVelocity = plane.ClipVelocity
+    };
+}
+
+public record struct PlaneSolverResult(
+    Vector3 Delta,
+    int IterationCount)
+{
+    public static implicit operator PlaneSolverResult(Interop.b3PlaneSolverResult result) => new()
+    {
+        Delta = Utility.ToVector3(result.delta),
+        IterationCount = result.iterationCount
     };
 }

@@ -2726,11 +2726,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3PlaneSolverResult b3SolvePlanes(b3Vec3 targetDelta, IntPtr planes, int count); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3PlaneSolverResult b3SolvePlanes(b3Vec3 targetDelta, b3CollisionPlane* planes, int count);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Vec3 b3ClipVector(b3Vec3 vector, IntPtr planes, int count); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3Vec3 b3ClipVector(b3Vec3 vector, b3CollisionPlane* planes, int count);
 
     // ../box3d/include/box3d/box3d.h
 
@@ -2804,11 +2804,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial float b3World_CastMover(b3WorldId worldId, b3Vec3 origin, IntPtr mover, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial float b3World_CastMover(b3WorldId worldId, b3Vec3 origin, in b3Capsule mover, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, IntPtr context);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3World_CollideMover(b3WorldId worldId, b3Vec3 origin, IntPtr mover, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial void b3World_CollideMover(b3WorldId worldId, b3Vec3 origin, in b3Capsule mover, b3QueryFilter filter, IntPtr fcn, IntPtr context);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

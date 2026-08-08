@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace Box3D;
@@ -108,7 +109,7 @@ public struct WorldDef
         DestroyDebugShape = def.destroyDebugShape,
         UserDebugShapeContext = def.userDebugShapeContext,
         Capacity = def.capacity,
-        InternalValue = def.internalValue  
+        InternalValue = def.internalValue
     };
 }
 
@@ -117,6 +118,39 @@ public class World
     public Interop.b3WorldId ID { get; private init; }
 
     public bool IsValid => Interop.b3World_IsValid(ID);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private unsafe delegate bool PlaneResultDelegate(ShapeID shapeID, PlaneResult* plane, int planeCount, void* context);
+    private unsafe static readonly PlaneResultDelegate PlaneCollectorInstance = PlaneCollector;
+    private readonly IntPtr PlaneCollectorPtr = Marshal.GetFunctionPointerForDelegate(PlaneCollectorInstance);
+
+    private unsafe struct PlaneCollectorContext
+    {
+        public CollisionPlane* Buffer;
+        public int Capacity;
+        public int Count;
+        public float PushLimit;
+    }
+
+    private unsafe static bool PlaneCollector(ShapeID shapeID, PlaneResult* planes, int planeCount, void* context)
+    {
+        var collectorContext = (PlaneCollectorContext*)context;
+        for (var i = 0; i < planeCount; i += 1)
+        {
+            if (collectorContext->Count == collectorContext->Capacity)
+            {
+                return false;
+            }
+
+            collectorContext->Buffer[collectorContext->Count] = new CollisionPlane(
+                planes[i].Plane,
+                collectorContext->PushLimit,
+                0f,
+                true);
+            collectorContext->Count += 1;
+        }
+        return true;
+    }
 
     public static World Create(WorldDef def)
     {
@@ -210,5 +244,49 @@ public class World
     {
         var events = Interop.b3World_GetJointEvents(ID);
         return new ReadOnlySpan<JointEvent>(events.jointEvents, events.count);
+    }
+
+    public float CastMover(Vector3 origin, in Capsule mover, Vector3 translation, QueryFilter filter)
+    {
+        return Interop.b3World_CastMover(
+            ID,
+            Utility.ToBox3DVector(origin),
+            mover,
+            Utility.ToBox3DVector(translation),
+            filter,
+            IntPtr.Zero,
+            IntPtr.Zero);
+    }
+
+    public unsafe int CollideMover(Vector3 origin, in Capsule mover, QueryFilter filter, Span<CollisionPlane> planes, float pushLimit = float.MaxValue)
+    {
+        fixed (CollisionPlane* p = planes)
+        {
+            var context = new PlaneCollectorContext
+            {
+                Buffer = p,
+                Capacity = planes.Length,
+                PushLimit = pushLimit
+            };
+            Interop.b3World_CollideMover(ID, Utility.ToBox3DVector(origin), mover, filter, PlaneCollectorPtr, (nint)(&context));
+            return context.Count;
+        }
+    }
+
+    public unsafe static PlaneSolverResult SolvePlanes(Vector3 targetDelta, Span<CollisionPlane> planes)
+    {
+        fixed (CollisionPlane* p = planes)
+        {
+            // TODO: can the interop function just take a span somehow?
+            return Interop.b3SolvePlanes(Utility.ToBox3DVector(targetDelta), (Interop.b3CollisionPlane*)p, planes.Length);
+        }
+    }
+
+    public unsafe static Vector3 ClipVector(Vector3 vector, Span<CollisionPlane> planes)
+    {
+        fixed (CollisionPlane* p = planes)
+        {
+            return Utility.ToVector3(Interop.b3ClipVector(Utility.ToBox3DVector(vector), (Interop.b3CollisionPlane*)p, planes.Length));
+        }
     }
 }

@@ -213,14 +213,14 @@ internal static class UserProvidedData
         { ("b3CollideTriangleAndSphere", "manifold"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:647:13
         { ("b3CollideTriangleAndSphere", "triangleA"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:647:13
         { ("b3CollideTriangleAndSphere", "sphereB"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:647:13
-        { ("b3SolvePlanes", "planes"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:661:28
-        { ("b3ClipVector", "planes"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:665:15
+        { ("b3SolvePlanes", "planes"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:661:28
+        { ("b3ClipVector", "planes"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:665:15
         { ("b3CreateWorld", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:35:18
         { ("b3World_Draw", "draw"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:56:13
         { ("b3World_OverlapShape", "proxy"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:80:20
         { ("b3World_CastShape", "proxy"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:104:20
-        { ("b3World_CastMover", "mover"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:118:14
-        { ("b3World_CollideMover", "mover"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:123:13
+        { ("b3World_CastMover", "mover"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:118:14
+        { ("b3World_CollideMover", "mover"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:123:13
         { ("b3World_Explode", "explosionDef"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:176:13
         { ("b3Recording_GetData", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:270:23
         { ("b3RecPlayer_DrawFrameQueries", "draw"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:424:13

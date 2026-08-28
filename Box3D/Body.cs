@@ -37,13 +37,12 @@ public struct Body : IEquatable<Body>
     // TODO: what about double-precision mode?
     public readonly Vector3 Position => Utility.ToVector3(Interop.b3Body_GetPosition(ID));
     public readonly Quaternion Rotation => Utility.ToQuaternion(Interop.b3Body_GetRotation(ID));
-    public readonly Transform Transform => Utility.ToTransform(Interop.b3Body_GetTransform(ID));
 
-    public readonly Vector3 LinearVelocity
-    {
-        get => Utility.ToVector3(Interop.b3Body_GetLinearVelocity(ID));
-        set => Interop.b3Body_SetLinearVelocity(ID, Utility.ToBox3DVector(value));
-    }
+    public readonly Transform Transform => Utility.ToTransform(Interop.b3Body_GetTransform(ID));
+    public readonly void SetTransform(Transform transform) => Interop.b3Body_SetTransform(ID, Utility.ToBox3DVector(transform.Position), Utility.ToBox3DQuaternion(transform.Quaternion));
+
+    public readonly Vector3 LinearVelocity => Utility.ToVector3(Interop.b3Body_GetLinearVelocity(ID));
+    public readonly void SetLinearVelocity(Vector3 velocity) => Interop.b3Body_SetLinearVelocity(ID, Utility.ToBox3DVector(velocity));
 
     public readonly Vector3 AngularVelocity
     {

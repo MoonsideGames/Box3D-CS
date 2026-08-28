@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
@@ -119,6 +120,8 @@ public class World
 
     public bool IsValid => Interop.b3World_IsValid(ID);
 
+    // Various callback helpers
+
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private unsafe delegate bool PlaneResultDelegate(ShapeID shapeID, PlaneResult* plane, int planeCount, void* context);
     private unsafe static readonly PlaneResultDelegate PlaneCollectorInstance = PlaneCollector;
@@ -150,6 +153,100 @@ public class World
             collectorContext->Count += 1;
         }
         return true;
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private unsafe delegate float CastCollectorDelegate(ShapeID shapeID, Vector3 point, Vector3 normal, float fraction, ulong userMaterialID, int triangleIndex, int childIndex, void* context);
+    private unsafe static readonly CastCollectorDelegate CastCollectorInstance = CastCollector;
+    private readonly IntPtr CastCollectorPtr = Marshal.GetFunctionPointerForDelegate(CastCollectorInstance);
+
+    private unsafe static readonly CastCollectorDelegate ClosestShapeCastInstance = ClosestShapeCast;
+    private readonly IntPtr ClosestShapeCastPtr = Marshal.GetFunctionPointerForDelegate(ClosestShapeCastInstance);
+
+    private unsafe struct RayCollectorContext
+    {
+        public RayHit* Buffer;
+        public int Capacity;
+        public int Count;
+    }
+
+    private unsafe static float CastCollector(ShapeID shapeID, Vector3 point, Vector3 normal, float fraction, ulong userMaterialID, int triangleIndex, int childIndex, void* context)
+    {
+        var collectorContext = (RayCollectorContext*)context;
+
+        // Terminate if buffer is full
+        if (collectorContext->Count == collectorContext->Capacity) { return 0f; }
+
+        collectorContext->Buffer[collectorContext->Count] = new RayHit(
+            shapeID,
+            point,
+            normal,
+            fraction,
+            userMaterialID,
+            triangleIndex,
+            childIndex
+        );
+        collectorContext->Count += 1;
+
+        return 1; // Collect every hit
+    }
+
+    [InlineArray(16)]
+    private struct IgnoreShapesArray
+    {
+        private Interop.b3ShapeId ignoreShape;
+    }
+
+    private struct ClosestShapeCastContext
+    {
+        public IgnoreShapesArray IgnoreShapes;
+        public int IgnoreCount;
+        public float ClosestFraction;
+        public Vector3 ClosestNormal;
+        public Vector3 ClosestPoint;
+        public Interop.b3ShapeId ClosestShape;
+        public bool Hit;
+        public bool StartedSolid;
+    }
+
+    public struct ClosestShapeCastResult
+    {
+        public float ClosestFraction;
+        public Vector3 ClosestNormal;
+        public Vector3 ClosestPoint;
+        public ShapeID ClosestShape;
+        public bool Hit;
+        public bool StartedSolid;
+    }
+
+    private unsafe static float ClosestShapeCast(ShapeID shapeID, Vector3 point, Vector3 normal, float fraction, ulong userMaterialID, int triangleIndex, int childIndex, void* context)
+    {
+        var closestShapeContext = (ClosestShapeCastContext*)context;
+
+        for (var i = 0; i < closestShapeContext->IgnoreCount; i += 1)
+        {
+            if (shapeID == closestShapeContext->IgnoreShapes[i])
+            {
+                return -1f;
+            }
+        }
+
+        if (fraction == 0f)
+        {
+            closestShapeContext->StartedSolid = true;
+            return -1f;
+        }
+
+        if (fraction < closestShapeContext->ClosestFraction)
+        {
+            closestShapeContext->ClosestFraction = fraction;
+            closestShapeContext->ClosestNormal = normal;
+            closestShapeContext->ClosestPoint = point;
+            closestShapeContext->ClosestShape = shapeID;
+            closestShapeContext->Hit = true;
+        }
+
+        return closestShapeContext->ClosestFraction;
     }
 
     public static World Create(WorldDef def)
@@ -256,6 +353,97 @@ public class World
             filter,
             IntPtr.Zero,
             IntPtr.Zero);
+    }
+
+    public unsafe int CastShape(Vector3 origin, ReadOnlySpan<Vector3> proxyPoints, float proxyRadius, Vector3 translation, QueryFilter filter, Span<RayHit> hits, out TreeStats stats)
+    {
+        if (proxyPoints.IsEmpty) 
+        { 
+            stats = new TreeStats();
+            return 0; 
+        }
+
+        fixed (Vector3* points = proxyPoints)
+        fixed (RayHit* buffer = hits)
+        {
+            var proxy = new Interop.b3ShapeProxy
+            {
+                points = (Interop.b3Vec3*)points,
+                count = proxyPoints.Length,
+                radius = proxyRadius
+            };
+
+            var collectorContext = new RayCollectorContext
+            {
+                Buffer = buffer,
+                Capacity = hits.Length
+            };
+
+            stats = Interop.b3World_CastShape(
+                ID,
+                Utility.ToBox3DVector(origin),
+                proxy,
+                Utility.ToBox3DVector(translation),
+                filter,
+                CastCollectorPtr,
+                (nint)(&collectorContext)
+            );
+
+            return collectorContext.Count;
+        }
+    }
+
+    public int CastShape(Vector3 origin, ReadOnlySpan<Vector3> proxyPoints, float proxyRadius, Vector3 translation, QueryFilter filter, Span<RayHit> hits) =>
+        CastShape(origin, proxyPoints, proxyRadius, translation, filter, hits, out _);
+
+    // FIXME: this will silently fail if the ignore shapes is longer than 16, how do we warn?
+    public unsafe ClosestShapeCastResult CastShapeClosest(Vector3 origin, ReadOnlySpan<Vector3> proxyPoints, float proxyRadius, Vector3 translation, QueryFilter filter, Span<ShapeID> ignoreShapes)
+    {
+        if (proxyPoints.IsEmpty) 
+        { 
+            return new ClosestShapeCastResult();
+        }
+
+        fixed (Vector3* points = proxyPoints)
+        {
+            var proxy = new Interop.b3ShapeProxy
+            {
+                points = (Interop.b3Vec3*)points,
+                count = proxyPoints.Length,
+                radius = proxyRadius
+            };
+
+            var closestShapeContext = new ClosestShapeCastContext();
+            for (var i = 0; i < int.Min(ignoreShapes.Length, 16); i += 1)
+            {
+                closestShapeContext.IgnoreShapes[i] = ignoreShapes[i];
+            }
+            closestShapeContext.IgnoreCount = ignoreShapes.Length;
+            closestShapeContext.ClosestFraction = 1f;
+            closestShapeContext.Hit = false;
+            closestShapeContext.StartedSolid = false;
+            closestShapeContext.ClosestShape = new Interop.b3ShapeId(); // null shape id
+
+            Interop.b3World_CastShape(
+                ID,
+                Utility.ToBox3DVector(origin),
+                proxy,
+                Utility.ToBox3DVector(translation),
+                filter,
+                ClosestShapeCastPtr,
+                (nint)(&closestShapeContext)
+            );
+
+            return new ClosestShapeCastResult
+            {
+                ClosestFraction = closestShapeContext.ClosestFraction,
+                ClosestNormal = closestShapeContext.ClosestNormal,
+                ClosestPoint = closestShapeContext.ClosestPoint,
+                ClosestShape = closestShapeContext.ClosestShape,
+                Hit = closestShapeContext.Hit,
+                StartedSolid = closestShapeContext.StartedSolid
+            };
+        }
     }
 
     public unsafe int CollideMover(Vector3 origin, in Capsule mover, QueryFilter filter, Span<CollisionPlane> planes, float pushLimit = float.MaxValue)

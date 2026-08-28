@@ -241,3 +241,23 @@ public record struct PlaneSolverResult(
         IterationCount = result.iterationCount
     };
 }
+
+public record struct TreeStats(
+    int NodeVisits,
+    int LeafVisits)
+{
+    public static implicit operator TreeStats(Interop.b3TreeStats result) => new()
+    {
+        NodeVisits = result.nodeVisits,
+        LeafVisits = result.leafVisits
+    };
+}
+
+public readonly record struct RayHit(
+    ShapeID ShapeID,
+    Vector3 Point,
+    Vector3 Normal,
+    float Fraction,
+    ulong UserMaterialID,
+    int TriangleIndex,
+    int ChildIndex);

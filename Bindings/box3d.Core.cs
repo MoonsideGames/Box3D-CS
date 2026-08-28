@@ -2800,7 +2800,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3World_CastShape(b3WorldId worldId, b3Vec3 origin, IntPtr proxy, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3World_CastShape(b3WorldId worldId, b3Vec3 origin, in b3ShapeProxy proxy, b3Vec3 translation, b3QueryFilter filter, IntPtr fcn, IntPtr context);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

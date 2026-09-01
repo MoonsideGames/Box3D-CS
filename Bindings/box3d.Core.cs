@@ -458,11 +458,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Transform b3InvMulWorldTransforms(b3Transform A, b3Transform B);
+    public static partial b3Transform b3MulWorldTransforms(b3Transform A, b3Transform B);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3Transform b3MulWorldTransforms(b3Transform A, b3Transform B);
+    public static partial b3Transform b3InvMulWorldTransforms(b3Transform A, b3Transform B);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -1516,6 +1516,9 @@ public static unsafe partial class Interop
     {
         public b3Plane plane;
         public b3Vec3 point;
+        public int triangleIndex;
+        public int childIndex;
+        public int materialIndex;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1539,6 +1542,15 @@ public static unsafe partial class Interop
     {
         public b3ShapeId shapeId;
         public b3PlaneResult result;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct b3BodyTOIResult
+    {
+        public b3Vec3 point;
+        public b3Vec3 normal;
+        public float fraction;
+        public b3ShapeId shapeId;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1589,8 +1601,7 @@ public static unsafe partial class Interop
     public struct b3HullData
     {
         public ulong version;
-        public int byteCount;
-        public uint hash;
+        public ulong hash;
         public b3AABB aabb;
         public float surfaceArea;
         public float volume;
@@ -1607,7 +1618,7 @@ public static unsafe partial class Interop
         public int faceOffset;
         public int soaVertexOffset;
         public int soaNormalOffset;
-        public int padding;
+        public int byteCount;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1666,7 +1677,7 @@ public static unsafe partial class Interop
         public b3HullFace boxFaces3;
         public b3HullFace boxFaces4;
         public b3HullFace boxFaces5;
-        public fixed byte padding[10];
+        public fixed byte padding[2];
         public fixed float vx[8];
         public fixed float vy[8];
         public fixed float vz[8];
@@ -1679,6 +1690,7 @@ public static unsafe partial class Interop
     public struct b3MeshDef
     {
         public b3Vec3* vertices;
+        public UIntPtr stride;
         public int* indices;
         public byte* materialIndices;
         public float weldTolerance;
@@ -1687,6 +1699,7 @@ public static unsafe partial class Interop
         public NativeBool weldVertices;
         public NativeBool useMedianSplit;
         public NativeBool identifyEdges;
+        public NativeBool clockWiseWinding;
     }
 
     [Flags]
@@ -1750,8 +1763,8 @@ public static unsafe partial class Interop
     public struct b3MeshData
     {
         public ulong version;
+        public ulong hash;
         public int byteCount;
-        public uint hash;
         public b3AABB bounds;
         public float surfaceArea;
         public int treeHeight;
@@ -1765,6 +1778,7 @@ public static unsafe partial class Interop
         public int materialOffset;
         public int materialCount;
         public int flagsOffset;
+        public int padding;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -1791,8 +1805,8 @@ public static unsafe partial class Interop
     public struct b3HeightFieldData
     {
         public ulong version;
+        public ulong hash;
         public int byteCount;
-        public uint hash;
         public b3AABB aabb;
         public float minHeight;
         public float maxHeight;
@@ -1803,8 +1817,8 @@ public static unsafe partial class Interop
         public int heightsOffset;
         public int materialOffset;
         public int flagsOffset;
-        public NativeBool clockwise;
-        public fixed byte padding[3];
+        public byte clockwise;
+        public fixed byte padding[7];
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -2995,11 +3009,11 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial IntPtr b3RecPlayer_Create(IntPtr data, int size, int workerCount);
+    public static partial IntPtr b3CreatePlayer(IntPtr data, int size, int workerCount);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void b3RecPlayer_Destroy(IntPtr player);
+    public static partial void b3DestroyPlayer(IntPtr player);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3422,6 +3436,18 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial float b3Body_GetMinExtent(b3BodyId bodyId);
+
+    [LibraryImport(nativeLibName)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial b3Vec3 b3Body_GetMaxExtent(b3BodyId bodyId);
+
+    [LibraryImport(nativeLibName)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial b3Vec3 b3Body_GetMaxExtentOrigin(b3BodyId bodyId);
+
+    [LibraryImport(nativeLibName)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial float b3Body_GetClosestPoint(b3BodyId bodyId, IntPtr result, b3Vec3 target); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
@@ -3439,6 +3465,10 @@ public static unsafe partial class Interop
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int b3Body_CollideMover(b3BodyId bodyId, IntPtr bodyPlanes, int planeCapacity, b3Vec3 origin, IntPtr mover, b3QueryFilter filter, b3Transform bodyTransform); // WARN_UNKNOWN_POINTER_PARAMETER
+
+    [LibraryImport(nativeLibName)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial b3BodyTOIResult b3Body_TimeOfImpactMover(b3BodyId bodyId, b3Vec3 origin, ref b3Capsule mover, b3Vec3 moverTranslation, b3QueryFilter filter, b3Transform bodyTransform1, b3Transform bodyTransform2); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3724,6 +3754,10 @@ public static unsafe partial class Interop
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void b3Joint_WakeBodies(b3JointId jointId);
+
+    [LibraryImport(nativeLibName)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial NativeBool b3Joint_IsAwake(b3JointId jointId);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

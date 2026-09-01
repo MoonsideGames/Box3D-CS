@@ -268,6 +268,7 @@ internal static class UserProvidedData
         { ("b3CreateSphericalJoint", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:1490:18
         { ("b3CreateWeldJoint", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:1585:18
         { ("b3CreateWheelJoint", "def"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:1625:18
+        { ("b3Body_TimeOfImpactMover", "mover"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:800:24
     };
 
     internal static readonly Dictionary<string, string> ReturnedArrayCountParamNames = new()

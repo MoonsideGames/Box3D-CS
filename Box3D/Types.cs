@@ -210,7 +210,10 @@ public record struct Capsule(Vector3 Center1, Vector3 Center2, float Radius)
 
 public record struct PlaneResult(
     Plane Plane,
-    Vector3 Point)
+    Vector3 Point,
+    int TriangleIndex,
+    int ChildIndex,
+    int MaterialIndex)
 {
     public static implicit operator Interop.b3PlaneResult(PlaneResult result) =>
         Unsafe.BitCast<PlaneResult, Interop.b3PlaneResult>(result);

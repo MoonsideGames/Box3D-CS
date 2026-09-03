@@ -343,7 +343,7 @@ public class World
         return new ReadOnlySpan<JointEvent>(events.jointEvents, events.count);
     }
 
-    public float CastMover(Vector3 origin, in Capsule mover, Vector3 translation, QueryFilter filter)
+    public float CastMover(in Vector3 origin, in Capsule mover, in Vector3 translation, QueryFilter filter)
     {
         return Interop.b3World_CastMover(
             ID,
@@ -355,12 +355,12 @@ public class World
             IntPtr.Zero);
     }
 
-    public unsafe int CastShape(Vector3 origin, ReadOnlySpan<Vector3> proxyPoints, float proxyRadius, Vector3 translation, QueryFilter filter, Span<RayHit> hits, out TreeStats stats)
+    public unsafe int CastShape(in Vector3 origin, ReadOnlySpan<Vector3> proxyPoints, float proxyRadius, in Vector3 translation, QueryFilter filter, Span<RayHit> hits, out TreeStats stats)
     {
-        if (proxyPoints.IsEmpty) 
-        { 
+        if (proxyPoints.IsEmpty)
+        {
             stats = new TreeStats();
-            return 0; 
+            return 0;
         }
 
         fixed (Vector3* points = proxyPoints)
@@ -393,14 +393,14 @@ public class World
         }
     }
 
-    public int CastShape(Vector3 origin, ReadOnlySpan<Vector3> proxyPoints, float proxyRadius, Vector3 translation, QueryFilter filter, Span<RayHit> hits) =>
+    public int CastShape(in Vector3 origin, ReadOnlySpan<Vector3> proxyPoints, float proxyRadius, in Vector3 translation, QueryFilter filter, Span<RayHit> hits) =>
         CastShape(origin, proxyPoints, proxyRadius, translation, filter, hits, out _);
 
     // FIXME: this will silently fail if the ignore shapes is longer than 16, how do we warn?
-    public unsafe ClosestShapeCastResult CastShapeClosest(Vector3 origin, ReadOnlySpan<Vector3> proxyPoints, float proxyRadius, Vector3 translation, QueryFilter filter, Span<ShapeID> ignoreShapes)
+    public unsafe ClosestShapeCastResult CastShapeClosest(in Vector3 origin, ReadOnlySpan<Vector3> proxyPoints, float proxyRadius, in Vector3 translation, QueryFilter filter, Span<ShapeID> ignoreShapes)
     {
-        if (proxyPoints.IsEmpty) 
-        { 
+        if (proxyPoints.IsEmpty)
+        {
             return new ClosestShapeCastResult();
         }
 
@@ -446,7 +446,7 @@ public class World
         }
     }
 
-    public unsafe int CollideMover(Vector3 origin, in Capsule mover, QueryFilter filter, Span<CollisionPlane> planes, float pushLimit = float.MaxValue)
+    public unsafe int CollideMover(in Vector3 origin, in Capsule mover, QueryFilter filter, Span<CollisionPlane> planes, float pushLimit = float.MaxValue)
     {
         fixed (CollisionPlane* p = planes)
         {
@@ -461,7 +461,7 @@ public class World
         }
     }
 
-    public unsafe static PlaneSolverResult SolvePlanes(Vector3 targetDelta, Span<CollisionPlane> planes)
+    public unsafe static PlaneSolverResult SolvePlanes(in Vector3 targetDelta, Span<CollisionPlane> planes)
     {
         fixed (CollisionPlane* p = planes)
         {
@@ -470,7 +470,7 @@ public class World
         }
     }
 
-    public unsafe static Vector3 ClipVector(Vector3 vector, Span<CollisionPlane> planes)
+    public unsafe static Vector3 ClipVector(in Vector3 vector, Span<CollisionPlane> planes)
     {
         fixed (CollisionPlane* p = planes)
         {

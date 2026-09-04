@@ -343,6 +343,15 @@ public class World
         return new ReadOnlySpan<JointEvent>(events.jointEvents, events.count);
     }
 
+    public RayResult CastRayClosest(Vector3 origin, Vector3 translation, QueryFilter filter)
+    {
+        return Interop.b3World_CastRayClosest(
+            ID,
+            Utility.ToBox3DVector(origin),
+            Utility.ToBox3DVector(translation),
+            filter);
+    }
+
     public float CastMover(in Vector3 origin, in Capsule mover, in Vector3 translation, QueryFilter filter)
     {
         return Interop.b3World_CastMover(

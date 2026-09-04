@@ -264,3 +264,30 @@ public readonly record struct RayHit(
     ulong UserMaterialID,
     int TriangleIndex,
     int ChildIndex);
+
+public readonly record struct RayResult(
+    ShapeID ShapeID,
+    Vector3 Point,
+    Vector3 Normal,
+    ulong UserMaterialID,
+    float Fraction,
+    int TriangleIndex,
+    int ChildIndex,
+    int NodeVisits,
+    int LeafVisits,
+    bool Hit)
+{
+    public static implicit operator RayResult(Interop.b3RayResult result) => new()
+    {
+        ShapeID = result.shapeId,
+        Point = Utility.ToVector3(result.point),
+        Normal = Utility.ToVector3(result.normal),
+        UserMaterialID = result.userMaterialId,
+        Fraction = result.fraction,
+        TriangleIndex = result.triangleIndex,
+        ChildIndex = result.childIndex,
+        NodeVisits = result.nodeVisits,
+        LeafVisits = result.leafVisits,
+        Hit = result.hit
+    };
+}

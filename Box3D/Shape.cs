@@ -31,6 +31,8 @@ public struct Shape : IEquatable<Shape>
         ID = id;
     }
 
+    public static Body GetBody(ShapeID shapeID) => new(Interop.b3Shape_GetBody(shapeID));
+
     public readonly override bool Equals(object obj) => obj is Shape other && Equals(other);
     public readonly bool Equals(Shape other) => ID.Equals(other.ID);
     public override readonly int GetHashCode() => ID.GetHashCode();

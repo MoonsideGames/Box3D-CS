@@ -234,6 +234,10 @@ public record struct CollisionPlane(
     };
 }
 
+public record struct CollisionPlaneExtra(
+    Vector3 Point,
+    ShapeID ShapeID);
+
 public record struct PlaneSolverResult(
     Vector3 Delta,
     int IterationCount)
@@ -290,4 +294,25 @@ public readonly record struct RayResult(
         LeafVisits = result.leafVisits,
         Hit = result.hit
     };
+}
+
+public readonly record struct Matrix3x3(
+    Vector3 X,
+    Vector3 Y,
+    Vector3 Z)
+{
+    public static implicit operator Matrix3x3(Interop.b3Matrix3 matrix) =>
+        Unsafe.BitCast<Interop.b3Matrix3, Matrix3x3>(matrix);
+
+    public Vector3 Multiply(Vector3 a)
+    {
+        return new Vector3(
+            X.X * a.X + Y.X * a.Y + Z.X * a.Z,
+            X.Y * a.X + Y.Y * a.Y + Z.Y * a.Z,
+            X.Z * a.X + Y.Z * a.Y + Z.Z * a.Z
+        );
+    }
+
+    public static Vector3 operator *(Matrix3x3 m, Vector3 a) =>
+        m.Multiply(a);
 }

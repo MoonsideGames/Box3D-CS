@@ -133,6 +133,8 @@ public class World
         public int Capacity;
         public int Count;
         public float PushLimit;
+
+        public CollisionPlaneExtra* PlaneExtrasBuffer;
     }
 
     private unsafe static bool PlaneCollector(ShapeID shapeID, PlaneResult* planes, int planeCount, void* context)
@@ -150,6 +152,13 @@ public class World
                 collectorContext->PushLimit,
                 0f,
                 true);
+
+            if (collectorContext->PlaneExtrasBuffer != null)
+            {
+                collectorContext->PlaneExtrasBuffer[collectorContext->Count] = new CollisionPlaneExtra(
+                    planes[i].Point,
+                    shapeID);
+            }
             collectorContext->Count += 1;
         }
         return true;
@@ -455,15 +464,17 @@ public class World
         }
     }
 
-    public unsafe int CollideMover(in Vector3 origin, in Capsule mover, QueryFilter filter, Span<CollisionPlane> planes, float pushLimit = float.MaxValue)
+    public unsafe int CollideMover(in Vector3 origin, in Capsule mover, QueryFilter filter, Span<CollisionPlane> planes, Span<CollisionPlaneExtra> planeExtras, float pushLimit = float.MaxValue)
     {
         fixed (CollisionPlane* p = planes)
+        fixed(CollisionPlaneExtra* e = planeExtras)
         {
             var context = new PlaneCollectorContext
             {
                 Buffer = p,
                 Capacity = planes.Length,
-                PushLimit = pushLimit
+                PushLimit = pushLimit,
+                PlaneExtrasBuffer = e
             };
             Interop.b3World_CollideMover(ID, Utility.ToBox3DVector(origin), mover, filter, PlaneCollectorPtr, (nint)(&context));
             return context.Count;

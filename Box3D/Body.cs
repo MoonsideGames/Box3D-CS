@@ -52,6 +52,10 @@ public struct Body : IEquatable<Body>
 
     public readonly BodyType Type => (BodyType)Interop.b3Body_GetType(ID);
 
+    public readonly float InverseMass => Interop.b3Body_GetInverseMass(ID);
+    public readonly Matrix3x3 WorldInverseRotationalInertia => Interop.b3Body_GetWorldInverseRotationalInertia(ID);
+    public readonly Vector3 WorldCenter => Utility.ToVector3(Interop.b3Body_GetWorldCenter(ID));
+
     // TODO: userdata
 
     public readonly int ShapeCount => Interop.b3Body_GetShapeCount(ID);
@@ -65,6 +69,9 @@ public struct Body : IEquatable<Body>
         Interop.b3DestroyBody(ID);
         ID = default; // FIXME: is mutability a problem here?
     }
+
+    public void ApplyLinearImpulse(Vector3 impulse, Vector3 point, bool wake) =>
+        Interop.b3Body_ApplyLinearImpulse(ID, Utility.ToBox3DVector(impulse), Utility.ToBox3DVector(point), wake);
 
     public unsafe int GetShapes(Span<ShapeID> buffer)
     {
@@ -112,7 +119,7 @@ public struct Body : IEquatable<Body>
             // this API accesses the whole data via pointer to the sub-struct
             shapeID = Interop.b3CreateHullShape(ID, nativeShapeDef, &h->@base);
         }
-    
+
         var shape = new Shape(shapeID);
 
         FreeNativeShapeDef(nativeShapeDef);

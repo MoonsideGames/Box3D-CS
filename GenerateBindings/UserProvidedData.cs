@@ -217,7 +217,7 @@ internal static class UserProvidedData
         { ("b3ClipVector", "planes"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:665:15
         { ("b3CreateWorld", "def"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:35:18
         { ("b3World_Draw", "draw"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:56:13
-        { ("b3World_OverlapShape", "proxy"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/box3d.h:80:20
+        { ("b3World_OverlapShape", "proxy"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:80:20
         { ("b3World_CastShape", "proxy"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:104:20
         { ("b3World_CastMover", "mover"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:118:14
         { ("b3World_CollideMover", "mover"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/box3d.h:123:13

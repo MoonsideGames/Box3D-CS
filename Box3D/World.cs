@@ -165,6 +165,30 @@ public class World
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private unsafe delegate bool OverlapCollectorDelegate(ShapeID shapeID, void* context);
+    private unsafe static readonly OverlapCollectorDelegate OverlapCollectorInstance = OverlapCollector;
+    private readonly IntPtr OverlapCollectorPtr = Marshal.GetFunctionPointerForDelegate(OverlapCollectorInstance);
+
+    private unsafe struct OverlapCollectorContext
+    {
+        public ShapeID* Buffer;
+        public int Capacity;
+        public int Count;
+    }
+
+    private unsafe static bool OverlapCollector(ShapeID shapeID, void* context)
+    {
+        var collectorContext = (OverlapCollectorContext*)context;
+
+        // Terminate if buffer is full
+        if (collectorContext->Count == collectorContext->Capacity) { return false;}
+
+        collectorContext->Buffer[collectorContext->Count] = shapeID;
+        collectorContext->Count += 1;
+        return true;
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private unsafe delegate float CastCollectorDelegate(ShapeID shapeID, Vector3 point, Vector3 normal, float fraction, ulong userMaterialID, int triangleIndex, int childIndex, void* context);
     private unsafe static readonly CastCollectorDelegate CastCollectorInstance = CastCollector;
     private readonly IntPtr CastCollectorPtr = Marshal.GetFunctionPointerForDelegate(CastCollectorInstance);
@@ -172,7 +196,7 @@ public class World
     private unsafe static readonly CastCollectorDelegate ClosestShapeCastInstance = ClosestShapeCast;
     private readonly IntPtr ClosestShapeCastPtr = Marshal.GetFunctionPointerForDelegate(ClosestShapeCastInstance);
 
-    private unsafe struct RayCollectorContext
+    private unsafe struct CastCollectorContext
     {
         public RayHit* Buffer;
         public int Capacity;
@@ -181,7 +205,7 @@ public class World
 
     private unsafe static float CastCollector(ShapeID shapeID, Vector3 point, Vector3 normal, float fraction, ulong userMaterialID, int triangleIndex, int childIndex, void* context)
     {
-        var collectorContext = (RayCollectorContext*)context;
+        var collectorContext = (CastCollectorContext*)context;
 
         // Terminate if buffer is full
         if (collectorContext->Count == collectorContext->Capacity) { return 0f; }
@@ -352,6 +376,49 @@ public class World
         return new ReadOnlySpan<JointEvent>(events.jointEvents, events.count);
     }
 
+    public int OverlapPoint(Vector3 origin, QueryFilter filter, Span<ShapeID> results) =>
+        OverlapShape(origin, [Vector3.Zero], 0, filter, results);
+
+    public int OverlapShape(Vector3 origin, ReadOnlySpan<Vector3> proxyPoints, float proxyRadius, QueryFilter filter, Span<ShapeID> results) =>
+        OverlapShape(origin, proxyPoints, proxyRadius, filter, results, out _);
+
+    public unsafe int OverlapShape(Vector3 origin, ReadOnlySpan<Vector3> proxyPoints, float proxyRadius, QueryFilter filter, Span<ShapeID> results, out TreeStats stats)
+    {
+        if (proxyPoints.IsEmpty)
+        {
+            stats = new TreeStats();
+            return 0;
+        }
+
+        fixed (Vector3* points = proxyPoints)
+        fixed (ShapeID* buffer = results)
+        {
+            var proxy = new Interop.b3ShapeProxy
+            {
+                points = (Interop.b3Vec3*)points,
+                count = proxyPoints.Length,
+                radius = proxyRadius
+            };
+
+            var collectorContext = new OverlapCollectorContext
+            {
+                Buffer = buffer,
+                Capacity = results.Length
+            };
+
+            stats = Interop.b3World_OverlapShape(
+                ID,
+                Utility.ToBox3DVector(origin),
+                proxy,
+                filter,
+                OverlapCollectorPtr,
+                (nint)(&collectorContext));
+
+            return collectorContext.Count;
+        }
+
+    }
+
     public RayResult CastRayClosest(Vector3 origin, Vector3 translation, QueryFilter filter)
     {
         return Interop.b3World_CastRayClosest(
@@ -391,7 +458,7 @@ public class World
                 radius = proxyRadius
             };
 
-            var collectorContext = new RayCollectorContext
+            var collectorContext = new CastCollectorContext
             {
                 Buffer = buffer,
                 Capacity = hits.Length

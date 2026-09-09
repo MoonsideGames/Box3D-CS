@@ -2802,7 +2802,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3TreeStats b3World_OverlapShape(b3WorldId worldId, b3Vec3 origin, IntPtr proxy, b3QueryFilter filter, IntPtr fcn, IntPtr context); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3TreeStats b3World_OverlapShape(b3WorldId worldId, b3Vec3 origin, in b3ShapeProxy proxy, b3QueryFilter filter, IntPtr fcn, IntPtr context);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -3468,7 +3468,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3BodyTOIResult b3Body_TimeOfImpactMover(b3BodyId bodyId, b3Vec3 origin, ref b3Capsule mover, b3Vec3 moverTranslation, b3QueryFilter filter, b3Transform bodyTransform1, b3Transform bodyTransform2); // WARN_UNKNOWN_POINTER_PARAMETER
+    public static partial b3BodyTOIResult b3Body_TimeOfImpactMover(b3BodyId bodyId, b3Vec3 origin, IntPtr mover, b3Vec3 moverTranslation, b3QueryFilter filter, b3Transform bodyTransform1, b3Transform bodyTransform2); // WARN_UNKNOWN_POINTER_PARAMETER
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

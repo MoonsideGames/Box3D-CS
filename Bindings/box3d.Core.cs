@@ -2408,7 +2408,7 @@ public static unsafe partial class Interop
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial b3HullData* b3CreateHull(in b3Vec3 points, int pointCount, int maxVertexCount);
+    public static partial b3HullData* b3CreateHull(ReadOnlySpan<b3Vec3> points, int pointCount, int maxVertexCount);
 
     [LibraryImport(nativeLibName)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

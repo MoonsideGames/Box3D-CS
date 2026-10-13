@@ -397,6 +397,7 @@ internal static partial class Program
                                     is UserProvidedData.PointerFunctionDataIntent.Ref
                                     or UserProvidedData.PointerFunctionDataIntent.In
                                     or UserProvidedData.PointerFunctionDataIntent.Out
+                                    or UserProvidedData.PointerFunctionDataIntent.InArray
                                     or UserProvidedData.PointerFunctionDataIntent.OutArray
                             )
                             {
@@ -429,6 +430,9 @@ internal static partial class Program
                                         } else {
                                             typeName = $"{subtypeName}[]";
                                         }
+                                        break;
+                                    case UserProvidedData.PointerFunctionDataIntent.InArray:
+                                        typeName = CoreMode ? $"ReadOnlySpan<{subtypeName}>" : $"[In] {subtypeName}[]";
                                         break;
                                     case UserProvidedData.PointerFunctionDataIntent.OutArray:
                                         typeName = CoreMode ? $"Span<{subtypeName}>" : $"[Out] {subtypeName}[]";

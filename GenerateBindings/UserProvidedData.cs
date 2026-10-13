@@ -9,6 +9,7 @@ internal static class UserProvidedData
         Ref,
         Out,
         Array,
+        InArray, // for immutable data
         OutArray,
         Pointer,
         In,
@@ -71,7 +72,7 @@ internal static class UserProvidedData
         { ("b3CreateCone", "__return"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:219:20
         { ("b3CreateRock", "__return"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:222:20
         { ("b3CreateHull", "__return"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:225:20
-        { ("b3CreateHull", "points"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/collision.h:225:20
+        { ("b3CreateHull", "points"), PointerFunctionDataIntent.InArray }, // ../box3d/include/box3d/collision.h:225:20
         { ("b3CloneHull", "__return"), PointerFunctionDataIntent.Pointer }, // ../box3d/include/box3d/collision.h:228:20
         { ("b3CloneHull", "hull"), PointerFunctionDataIntent.In }, // ../box3d/include/box3d/collision.h:228:20
         { ("b3CloneAndTransformHull", "__return"), PointerFunctionDataIntent.Unknown }, // ../box3d/include/box3d/collision.h:231:20

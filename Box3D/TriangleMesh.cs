@@ -33,6 +33,12 @@ public unsafe class TriangleMesh
             };
 
             var mesh = Interop.b3CreateMesh(def, null, 0);
+
+            if (mesh == null)
+            {
+                return null;
+            }
+
             return new TriangleMesh(mesh);
         }
     }

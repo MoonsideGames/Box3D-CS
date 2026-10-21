@@ -6,8 +6,6 @@ namespace Box3D;
 // TODO: if we require .NET 10, we can use extension operators for conversions.
 public static class Utility
 {
-    public const float QuakeUnitsToMetersConstant = 0.0265625f;
-
     public static Interop.b3Vec3 ToBox3DVector(Vector3 vector) => Unsafe.BitCast<Vector3, Interop.b3Vec3>(vector);
     public static Vector3 ToVector3(Interop.b3Vec3 vec3) => Unsafe.BitCast<Interop.b3Vec3, Vector3>(vec3);
     public static Interop.b3Quat ToBox3DQuaternion(Quaternion q) => Unsafe.BitCast<Quaternion, Interop.b3Quat>(q);

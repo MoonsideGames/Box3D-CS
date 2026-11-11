@@ -116,7 +116,8 @@ public struct WorldDef
 
 public class World
 {
-    public Interop.b3WorldId ID { get; private init; }
+    public Interop.b3WorldId ID { get; private set; }
+    private readonly WorldDef WorldDef;
 
     public bool IsValid => Interop.b3World_IsValid(ID);
 
@@ -181,7 +182,7 @@ public class World
         var collectorContext = (OverlapCollectorContext*)context;
 
         // Terminate if buffer is full
-        if (collectorContext->Count == collectorContext->Capacity) { return false;}
+        if (collectorContext->Count == collectorContext->Capacity) { return false; }
 
         collectorContext->Buffer[collectorContext->Count] = shapeID;
         collectorContext->Count += 1;
@@ -285,12 +286,13 @@ public class World
     public static World Create(WorldDef def)
     {
         var handle = Interop.b3CreateWorld(def);
-        return new World(handle);
+        return new World(handle, def);
     }
 
-    private World(Interop.b3WorldId handle)
+    private World(Interop.b3WorldId handle, WorldDef worldDef)
     {
         ID = handle;
+        WorldDef = worldDef;
     }
 
     public void Step(float timestep, int subStepCount = 4)
@@ -534,7 +536,7 @@ public class World
     public unsafe int CollideMover(in Vector3 origin, in Capsule mover, QueryFilter filter, Span<CollisionPlane> planes, Span<CollisionPlaneExtra> planeExtras, float pushLimit = float.MaxValue)
     {
         fixed (CollisionPlane* p = planes)
-        fixed(CollisionPlaneExtra* e = planeExtras)
+        fixed (CollisionPlaneExtra* e = planeExtras)
         {
             var context = new PlaneCollectorContext
             {
@@ -546,6 +548,20 @@ public class World
             Interop.b3World_CollideMover(ID, Utility.ToBox3DVector(origin), mover, filter, PlaneCollectorPtr, (nint)(&context));
             return context.Count;
         }
+    }
+
+    // Completely resets the world.
+    // All existing bodies, shapes, etc will become invalid.
+    public void Reset()
+    {
+        Destroy();
+        ID = Interop.b3CreateWorld(WorldDef);
+    }
+
+    public void Destroy()
+    {
+        Interop.b3DestroyWorld(ID);
+        ID = default;
     }
 
     public unsafe static PlaneSolverResult SolvePlanes(in Vector3 targetDelta, Span<CollisionPlane> planes)

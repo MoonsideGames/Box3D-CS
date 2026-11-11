@@ -26,12 +26,22 @@ public struct Shape : IEquatable<Shape>
 
     public readonly bool IsValid => Interop.b3Shape_IsValid(ID);
 
+    public static Shape FromID(ShapeID id)
+    {
+        return new Shape(id);
+    }
+
     internal Shape(ShapeID id)
     {
         ID = id;
     }
 
     public static Body GetBody(ShapeID shapeID) => new(Interop.b3Shape_GetBody(shapeID));
+
+    public void Destroy(bool updateBodyMass)
+    {
+        Interop.b3DestroyShape(ID, updateBodyMass);
+    }
 
     public readonly override bool Equals(object obj) => obj is Shape other && Equals(other);
     public readonly bool Equals(Shape other) => ID.Equals(other.ID);

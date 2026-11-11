@@ -63,6 +63,11 @@ public struct Body : IEquatable<Body>
 
     internal Body(BodyID id) => ID = id;
 
+    public static Body FromID(BodyID bodyID)
+    {
+        return new Body(bodyID);
+    }
+
     public void Destroy()
     {
         if (ID.IsNull) { return; }
@@ -141,9 +146,9 @@ public struct Body : IEquatable<Body>
 
     private unsafe static Interop.b3ShapeDef AllocNativeShapeDef(in ShapeDef shapeDef)
     {
-        var materials = (Interop.b3SurfaceMaterial*) NativeMemory.Alloc(
-			(nuint) (shapeDef.Materials.Length * Marshal.SizeOf<Interop.b3SurfaceMaterial>())
-		);
+        var materials = (Interop.b3SurfaceMaterial*)NativeMemory.Alloc(
+            (nuint)(shapeDef.Materials.Length * Marshal.SizeOf<Interop.b3SurfaceMaterial>())
+        );
 
         for (var i = 0; i < shapeDef.Materials.Length; i += 1)
         {
